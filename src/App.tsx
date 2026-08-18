@@ -25,6 +25,7 @@ const emptyDraft: Draft = {
   followUpDate: '',
   notes: '',
 };
+const STARTER_DATA_VERSION = '2';
 const starterApplications: Application[] = [
   {
     id: '1',
@@ -119,7 +120,16 @@ const starterApplications: Application[] = [
 function loadApplications(): Application[] {
   try {
     const stored = localStorage.getItem('nextstep-applications');
-    return stored ? JSON.parse(stored) : starterApplications;
+    const storedApplications: Application[] = stored ? JSON.parse(stored) : [];
+    const starterDataVersion = localStorage.getItem('nextstep-starter-data-version');
+
+    if (starterDataVersion !== STARTER_DATA_VERSION) {
+      localStorage.setItem('nextstep-starter-data-version', STARTER_DATA_VERSION);
+      const storedIds = new Set(storedApplications.map((application) => application.id));
+      return [...storedApplications, ...starterApplications.filter(({ id }) => !storedIds.has(id))];
+    }
+
+    return storedApplications;
   } catch {
     return starterApplications;
   }
