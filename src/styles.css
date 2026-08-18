@@ -333,9 +333,8 @@ time {
   overflow: hidden;
 }
 .view-toggle button {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
+  display: grid;
+  place-items: center;
   box-sizing: border-box;
   flex: 0 0 56px;
   width: 56px;
