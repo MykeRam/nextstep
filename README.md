@@ -55,13 +55,13 @@ npm run build
 
 ### Next steps
 
+- [ ] Add user accounts and cloud-based storage with Supabase
+- [ ] Add a calendar view and scheduled follow-up reminders
+- [ ] Add dashboard insights
 - [ ] Add an AI Job Fit Analyzer with a secure server-side OpenAI integration
   - Compare a saved résumé against each job description
   - Return a match score, matching skills, and skill gaps
   - Suggest résumé improvements and draft tailored cover letters
-- [ ] Add user accounts and cloud-based storage with Supabase
-- [ ] Add a calendar view and scheduled follow-up reminders
-- [ ] Add dashboard insights
 
 ## Project status
 
