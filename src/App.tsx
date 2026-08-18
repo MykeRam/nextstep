@@ -2,6 +2,7 @@ import { FormEvent, useEffect, useMemo, useState } from 'react';
 
 import { ApplicationForm } from './components/ApplicationForm/ApplicationForm';
 import { AppHeader } from './components/AppHeader/AppHeader';
+import { AppFooter } from './components/AppFooter/AppFooter';
 import { Applications } from './components/Applications/Applications';
 import { AuthPanel } from './components/AuthPanel/AuthPanel';
 import { FollowUps } from './components/FollowUps/FollowUps';
@@ -231,6 +232,7 @@ export default function App() {
         onStatusFilterChange={setStatusFilter}
         onViewChange={setView}
       />
+      <AppFooter />
     </main>
   );
 }
