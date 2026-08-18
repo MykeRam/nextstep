@@ -293,6 +293,11 @@ textarea {
   color: #62666c;
   font-size: 12px;
 }
+.follow-ups-actions {
+  align-items: center;
+  display: flex;
+  gap: 12px;
+}
 .follow-ups-list {
   list-style: none;
   margin: 16px 0 0;
@@ -339,6 +344,8 @@ textarea {
   align-items: center;
   display: flex;
   gap: 10px;
+  justify-content: end;
+  margin-top: 16px;
 }
 .calendar-controls button {
   background: #fff;
@@ -702,10 +709,13 @@ time {
   .primary-button {
     grid-column: auto;
   }
-  .follow-up-calendar .section-heading {
-    align-items: start;
+  .follow-ups-actions {
+    align-items: end;
     flex-direction: column;
-    gap: 12px;
+    gap: 8px;
+  }
+  .calendar-controls {
+    justify-content: start;
   }
   .calendar-day {
     min-height: 68px;

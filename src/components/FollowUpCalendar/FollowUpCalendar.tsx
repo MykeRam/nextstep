@@ -10,10 +10,6 @@ type FollowUpCalendarProps = {
 
 const WEEKDAYS = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 
-function toLocalDate(date: string) {
-  return new Date(`${date}T00:00:00`);
-}
-
 function formatDateKey(date: Date) {
   const year = date.getFullYear();
   const month = String(date.getMonth() + 1).padStart(2, '0');
@@ -68,21 +64,15 @@ export function FollowUpCalendar({ applications, onEdit }: FollowUpCalendarProps
   }
 
   return (
-    <section className="card follow-up-calendar" aria-labelledby="calendar-title">
-      <div className="section-heading">
-        <div>
-          <h2 id="calendar-title">Follow-up calendar</h2>
-          <p>Plan each next step by date.</p>
-        </div>
-        <div className="calendar-controls">
-          <button aria-label="Previous month" onClick={() => changeMonth(-1)} type="button">
-            ←
-          </button>
-          <strong>{monthLabel}</strong>
-          <button aria-label="Next month" onClick={() => changeMonth(1)} type="button">
-            →
-          </button>
-        </div>
+    <div className="follow-up-calendar">
+      <div className="calendar-controls">
+        <button aria-label="Previous month" onClick={() => changeMonth(-1)} type="button">
+          ←
+        </button>
+        <strong>{monthLabel}</strong>
+        <button aria-label="Next month" onClick={() => changeMonth(1)} type="button">
+          →
+        </button>
       </div>
       <div className="calendar-grid" role="grid" aria-label={`${monthLabel} follow-up calendar`}>
         {WEEKDAYS.map((weekday) => (
@@ -121,6 +111,6 @@ export function FollowUpCalendar({ applications, onEdit }: FollowUpCalendarProps
           );
         })}
       </div>
-    </section>
+    </div>
   );
 }
