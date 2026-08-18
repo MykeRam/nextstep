@@ -40,13 +40,26 @@ npm run format:check
 npm run build
 ```
 
-## Planned next steps
+## Product roadmap
 
-- Add user accounts and cloud-based storage with Supabase
-- Add a calendar view and scheduled follow-up reminders
-- Add dashboard insights
-- Add résumé and job-description matching
+### Completed
+
+- [x] Set up the React, TypeScript, and Vite application
+- [x] Add, edit, delete, and persist job applications in the browser
+- [x] Add job links, follow-up dates, notes, and status updates
+- [x] Build search, status filters, sorting, and live stage counts
+- [x] Add list and responsive board views
+- [x] Surface upcoming follow-ups and overdue items
+- [x] Add realistic demo data across every application stage
+- [x] Add Prettier formatting and production-build checks
+
+### Next steps
+
+- [ ] Add user accounts and cloud-based storage with Supabase
+- [ ] Add a calendar view and scheduled follow-up reminders
+- [ ] Add dashboard insights
+- [ ] Add résumé and job-description matching
 
 ## Project status
 
-This is an early MVP built as a portfolio project. The current version focuses on a clean, usable application-tracking workflow before adding more advanced features.
+This is an active portfolio project. The MVP now covers a complete local application-tracking workflow, with cloud sync, reminders, and insights planned next.
