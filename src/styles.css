@@ -162,6 +162,59 @@ h2 {
 .auth-error {
   color: #a54747 !important;
 }
+.reminder-banner {
+  align-items: center;
+  background: #fff8e9;
+  border: 1px solid #eddec0;
+  border-radius: 10px;
+  display: flex;
+  gap: 20px;
+  justify-content: space-between;
+  margin-bottom: 18px;
+  padding: 14px 20px;
+}
+.reminder-banner h2,
+.reminder-banner p {
+  margin: 0;
+}
+.reminder-banner h2 {
+  font-size: 14px;
+}
+.reminder-banner p {
+  color: #766447;
+  font-size: 12px;
+  margin-top: 4px;
+}
+.reminder-banner ul {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.reminder-banner li {
+  align-items: center;
+  display: flex;
+  gap: 6px;
+}
+.reminder-banner li span {
+  color: #80621d;
+  font-size: 10px;
+  font-weight: 750;
+  text-transform: uppercase;
+}
+.reminder-banner .reminder-overdue {
+  color: #a54747;
+}
+.reminder-banner button {
+  background: #fff;
+  border: 1px solid #e2cfaa;
+  border-radius: 5px;
+  color: #594d36;
+  font-size: 12px;
+  padding: 6px 8px;
+}
 .section-heading,
 .toolbar {
   display: flex;
@@ -569,6 +622,10 @@ time {
     flex-direction: column;
   }
   .auth-panel {
+    align-items: start;
+    flex-direction: column;
+  }
+  .reminder-banner {
     align-items: start;
     flex-direction: column;
   }
