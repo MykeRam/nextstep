@@ -2,14 +2,14 @@ import { FormEvent, useEffect, useMemo, useState } from 'react';
 
 const STATUSES = ['Saved', 'Applied', 'Interviewing', 'Offer', 'Rejected'] as const;
 type Status = (typeof STATUSES)[number];
-type Application = { id: string; company: string; role: string; status: Status; location: string; appliedDate: string; notes: string };
+type Application = { id: string; company: string; role: string; status: Status; location: string; appliedDate: string; followUpDate: string; notes: string };
 type Draft = Omit<Application, 'id'>;
 
-const emptyDraft: Draft = { company: '', role: '', status: 'Saved', location: '', appliedDate: '', notes: '' };
+const emptyDraft: Draft = { company: '', role: '', status: 'Saved', location: '', appliedDate: '', followUpDate: '', notes: '' };
 const starterApplications: Application[] = [
-  { id: '1', company: 'Figma', role: 'Frontend Engineer', status: 'Interviewing', location: 'Remote', appliedDate: '2026-08-12', notes: 'Prepare for technical interview.' },
-  { id: '2', company: 'Notion', role: 'Software Engineer', status: 'Applied', location: 'San Francisco, CA', appliedDate: '2026-08-10', notes: '' },
-  { id: '3', company: 'Linear', role: 'Product Engineer', status: 'Saved', location: 'Remote', appliedDate: '', notes: 'Tailor résumé before applying.' },
+  { id: '1', company: 'Figma', role: 'Frontend Engineer', status: 'Interviewing', location: 'Remote', appliedDate: '2026-08-12', followUpDate: '2026-08-20', notes: 'Prepare for technical interview.' },
+  { id: '2', company: 'Notion', role: 'Software Engineer', status: 'Applied', location: 'San Francisco, CA', appliedDate: '2026-08-10', followUpDate: '2026-08-19', notes: '' },
+  { id: '3', company: 'Linear', role: 'Product Engineer', status: 'Saved', location: 'Remote', appliedDate: '', followUpDate: '', notes: 'Tailor résumé before applying.' },
 ];
 
 function loadApplications(): Application[] {
@@ -54,12 +54,13 @@ export default function App() {
         <label>Status<select value={draft.status} onChange={(event) => updateDraft('status', event.target.value)}>{STATUSES.map((status) => <option key={status}>{status}</option>)}</select></label>
         <label>Location<input value={draft.location} onChange={(event) => updateDraft('location', event.target.value)} placeholder="Remote or city" /></label>
         <label>Applied date<input type="date" value={draft.appliedDate} onChange={(event) => updateDraft('appliedDate', event.target.value)} /></label>
+        <label>Follow-up date<input type="date" value={draft.followUpDate ?? ''} onChange={(event) => updateDraft('followUpDate', event.target.value)} /></label>
         <label className="wide">Notes<textarea value={draft.notes} onChange={(event) => updateDraft('notes', event.target.value)} placeholder="Follow-up date, contacts, preparation notes…" rows={2} /></label>
         <button className="primary-button" type="submit">{editingId ? 'Save changes' : 'Add application'}</button>
       </form>
     </section>
     <section className="card applications-card"><div className="toolbar"><div><h2>Applications</h2><p>{visibleApplications.length} shown</p></div><div className="filters"><input aria-label="Search applications" value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Search" /><select aria-label="Filter by status" value={statusFilter} onChange={(event) => setStatusFilter(event.target.value as 'All' | Status)}><option>All</option>{STATUSES.map((status) => <option key={status}>{status}</option>)}</select></div></div>
-      {visibleApplications.length === 0 ? <p className="empty-state">No applications match those filters.</p> : <ul className="application-list">{visibleApplications.map((application) => <li key={application.id}><div><strong>{application.role}</strong><span>{application.company}{application.location && ` · ${application.location}`}</span>{application.notes && <small>{application.notes}</small>}</div><span className={`status ${application.status.toLowerCase()}`}>{application.status}</span><time>{application.appliedDate ? `Applied ${new Date(`${application.appliedDate}T00:00:00`).toLocaleDateString(undefined, { month: 'short', day: 'numeric' })}` : 'Not applied yet'}</time><div className="row-actions"><button onClick={() => editApplication(application)}>Edit</button><button className="delete-button" onClick={() => deleteApplication(application.id)}>Delete</button></div></li>)}</ul>}
+      {visibleApplications.length === 0 ? <p className="empty-state">No applications match those filters.</p> : <ul className="application-list">{visibleApplications.map((application) => <li key={application.id}><div><strong>{application.role}</strong><span>{application.company}{application.location && ` · ${application.location}`}</span>{application.followUpDate && <small className="follow-up">Follow up {new Date(`${application.followUpDate}T00:00:00`).toLocaleDateString(undefined, { month: 'short', day: 'numeric' })}</small>}{application.notes && <small>{application.notes}</small>}</div><span className={`status ${application.status.toLowerCase()}`}>{application.status}</span><time>{application.appliedDate ? `Applied ${new Date(`${application.appliedDate}T00:00:00`).toLocaleDateString(undefined, { month: 'short', day: 'numeric' })}` : 'Not applied yet'}</time><div className="row-actions"><button onClick={() => editApplication(application)}>Edit</button><button className="delete-button" onClick={() => deleteApplication(application.id)}>Delete</button></div></li>)}</ul>}
     </section>
   </main>;
 }
