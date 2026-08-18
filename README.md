@@ -55,11 +55,14 @@ npm run build
 
 ### Next steps
 
+- [ ] Add an AI Job Fit Analyzer with a secure server-side OpenAI integration
+  - Compare a saved résumé against each job description
+  - Return a match score, matching skills, and skill gaps
+  - Suggest résumé improvements and draft tailored cover letters
 - [ ] Add user accounts and cloud-based storage with Supabase
 - [ ] Add a calendar view and scheduled follow-up reminders
 - [ ] Add dashboard insights
-- [ ] Add résumé and job-description matching
 
 ## Project status
 
-This is an active portfolio project. The MVP now covers a complete local application-tracking workflow, with cloud sync, reminders, and insights planned next.
+This is an active portfolio project. The MVP now covers a complete local application-tracking workflow, with AI guidance, cloud sync, reminders, and insights planned next.
