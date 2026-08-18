@@ -3,9 +3,11 @@ import { FormEvent, useEffect, useMemo, useState } from 'react';
 import { ApplicationForm } from './components/ApplicationForm/ApplicationForm';
 import { AppHeader } from './components/AppHeader/AppHeader';
 import { Applications } from './components/Applications/Applications';
+import { AuthPanel } from './components/AuthPanel/AuthPanel';
 import { FollowUps } from './components/FollowUps/FollowUps';
 import { StatusSummary } from './components/StatusSummary/StatusSummary';
 import { emptyDraft } from './data/starterApplications';
+import { useAuth } from './hooks/useAuth';
 import {
   Application,
   ApplicationDraft,
@@ -17,6 +19,7 @@ import {
 import { loadApplications } from './utils/applications';
 
 export default function App() {
+  const { isConfigured, loading, sendMagicLink, signOut, user } = useAuth();
   const [applications, setApplications] = useState<Application[]>(loadApplications);
   const [statusFilter, setStatusFilter] = useState<Status | 'All'>('All');
   const [query, setQuery] = useState('');
@@ -125,6 +128,13 @@ export default function App() {
   return (
     <main className="app-shell">
       <AppHeader applicationCount={applications.length} />
+      <AuthPanel
+        isConfigured={isConfigured}
+        loading={loading}
+        onSendMagicLink={sendMagicLink}
+        onSignOut={signOut}
+        user={user}
+      />
       <StatusSummary
         activeStatus={statusFilter}
         statusCounts={statusCounts}

@@ -115,6 +115,50 @@ h2 {
   padding: 24px;
   margin-bottom: 18px;
 }
+.auth-panel {
+  align-items: center;
+  background: #f7f7f5;
+  border: 1px solid #e3e3df;
+  border-radius: 10px;
+  display: flex;
+  gap: 16px;
+  justify-content: space-between;
+  margin-bottom: 18px;
+  padding: 16px 20px;
+}
+.auth-panel h2,
+.auth-panel p {
+  margin: 0;
+}
+.auth-panel h2 {
+  font-size: 14px;
+}
+.auth-panel p {
+  color: #686c72;
+  font-size: 12px;
+  margin-top: 4px;
+}
+.auth-panel_signed-in p {
+  margin: 0;
+}
+.auth-form {
+  align-items: end;
+  display: flex;
+  gap: 8px;
+  margin: 0;
+}
+.auth-form label {
+  font-size: 12px;
+}
+.auth-form input {
+  min-width: 190px;
+}
+.auth-form .primary-button {
+  height: 38px;
+}
+.auth-message {
+  color: #4953b8 !important;
+}
 .section-heading,
 .toolbar {
   display: flex;
@@ -443,9 +487,16 @@ time {
     gap: 12px;
     flex-direction: column;
   }
+  .auth-panel {
+    align-items: start;
+    flex-direction: column;
+  }
   .filters {
     width: 100%;
     flex-wrap: wrap;
+  }
+  .auth-form {
+    width: 100%;
   }
   .filters input {
     width: 100%;
