@@ -5,6 +5,7 @@ import { AppHeader } from './components/AppHeader/AppHeader';
 import { Applications } from './components/Applications/Applications';
 import { AuthPanel } from './components/AuthPanel/AuthPanel';
 import { FollowUps } from './components/FollowUps/FollowUps';
+import { FollowUpCalendar } from './components/FollowUpCalendar/FollowUpCalendar';
 import { StatusSummary } from './components/StatusSummary/StatusSummary';
 import { emptyDraft } from './data/starterApplications';
 import { useAuth } from './hooks/useAuth';
@@ -205,6 +206,7 @@ export default function App() {
         onFilter={filterByStatus}
       />
       <FollowUps applications={upcomingFollowUps} onEdit={editApplication} />
+      <FollowUpCalendar applications={upcomingFollowUps} onEdit={editApplication} />
       <ApplicationForm
         draft={draft}
         editing={Boolean(editingId)}
