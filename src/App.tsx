@@ -17,6 +17,10 @@ function loadApplications(): Application[] {
   catch { return starterApplications; }
 }
 
+function formatDate(date: string) {
+  return new Date(`${date}T00:00:00`).toLocaleDateString(undefined, { month: 'short', day: 'numeric' });
+}
+
 export default function App() {
   const [applications, setApplications] = useState<Application[]>(loadApplications);
   const [statusFilter, setStatusFilter] = useState<'All' | Status>('All');
@@ -31,6 +35,11 @@ export default function App() {
     return matchesStatus && searchable.includes(query.toLowerCase());
   }), [applications, query, statusFilter]);
   const statusCounts = Object.fromEntries(STATUSES.map((status) => [status, applications.filter((application) => application.status === status).length])) as Record<Status, number>;
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  const upcomingFollowUps = useMemo(() => applications
+    .filter((application) => application.followUpDate && !['Offer', 'Rejected'].includes(application.status))
+    .sort((first, second) => first.followUpDate.localeCompare(second.followUpDate)), [applications]);
   const updateDraft = (field: keyof Draft, value: string) => setDraft((current) => ({ ...current, [field]: value }));
 
   function saveApplication(event: FormEvent<HTMLFormElement>) {
@@ -47,6 +56,9 @@ export default function App() {
   return <main className="app-shell">
     <header><div><p className="eyebrow">JOB APPLICATION COMMAND CENTER</p><h1>NextStep</h1><p className="subtitle">Keep your opportunities and next moves in one place.</p></div><div className="summary"><strong>{applications.length}</strong><span>applications</span></div></header>
     <section className="status-summary" aria-label="Application status summary">{STATUSES.map((status) => <article key={status}><strong>{statusCounts[status]}</strong><span>{status}</span></article>)}</section>
+    <section className="card follow-ups-card" aria-labelledby="follow-ups-title"><div className="section-heading"><div><h2 id="follow-ups-title">Upcoming follow-ups</h2><p>Keep your next action in view.</p></div><span className="follow-up-count">{upcomingFollowUps.length} scheduled</span></div>
+      {upcomingFollowUps.length === 0 ? <p className="empty-state">No follow-ups scheduled yet.</p> : <ul className="follow-ups-list">{upcomingFollowUps.map((application) => { const overdue = new Date(`${application.followUpDate}T00:00:00`) < today; return <li key={application.id}><div><strong>{application.company}</strong><span>{application.role}</span></div><time className={overdue ? 'overdue' : ''}>{overdue ? `Overdue · ${formatDate(application.followUpDate)}` : formatDate(application.followUpDate)}</time><button onClick={() => editApplication(application)}>Edit</button></li>; })}</ul>}
+    </section>
     <section className="card form-card"><div className="section-heading"><h2>{editingId ? 'Edit application' : 'Add an application'}</h2>{editingId && <button className="link-button" onClick={cancelEdit}>Cancel</button>}</div>
       <form onSubmit={saveApplication}>
         <label>Company<input required value={draft.company} onChange={(event) => updateDraft('company', event.target.value)} placeholder="e.g. Acme Inc." /></label>
@@ -60,7 +72,7 @@ export default function App() {
       </form>
     </section>
     <section className="card applications-card"><div className="toolbar"><div><h2>Applications</h2><p>{visibleApplications.length} shown</p></div><div className="filters"><input aria-label="Search applications" value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Search" /><select aria-label="Filter by status" value={statusFilter} onChange={(event) => setStatusFilter(event.target.value as 'All' | Status)}><option>All</option>{STATUSES.map((status) => <option key={status}>{status}</option>)}</select></div></div>
-      {visibleApplications.length === 0 ? <p className="empty-state">No applications match those filters.</p> : <ul className="application-list">{visibleApplications.map((application) => <li key={application.id}><div><strong>{application.role}</strong><span>{application.company}{application.location && ` · ${application.location}`}</span>{application.followUpDate && <small className="follow-up">Follow up {new Date(`${application.followUpDate}T00:00:00`).toLocaleDateString(undefined, { month: 'short', day: 'numeric' })}</small>}{application.notes && <small>{application.notes}</small>}</div><span className={`status ${application.status.toLowerCase()}`}>{application.status}</span><time>{application.appliedDate ? `Applied ${new Date(`${application.appliedDate}T00:00:00`).toLocaleDateString(undefined, { month: 'short', day: 'numeric' })}` : 'Not applied yet'}</time><div className="row-actions"><button onClick={() => editApplication(application)}>Edit</button><button className="delete-button" onClick={() => deleteApplication(application.id)}>Delete</button></div></li>)}</ul>}
+      {visibleApplications.length === 0 ? <p className="empty-state">No applications match those filters.</p> : <ul className="application-list">{visibleApplications.map((application) => <li key={application.id}><div><strong>{application.role}</strong><span>{application.company}{application.location && ` · ${application.location}`}</span>{application.followUpDate && <small className="follow-up">Follow up {formatDate(application.followUpDate)}</small>}{application.notes && <small>{application.notes}</small>}</div><span className={`status ${application.status.toLowerCase()}`}>{application.status}</span><time>{application.appliedDate ? `Applied ${formatDate(application.appliedDate)}` : 'Not applied yet'}</time><div className="row-actions"><button onClick={() => editApplication(application)}>Edit</button><button className="delete-button" onClick={() => deleteApplication(application.id)}>Delete</button></div></li>)}</ul>}
     </section>
   </main>;
 }
