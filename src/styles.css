@@ -328,6 +328,7 @@ time {
 }
 .view-toggle {
   display: flex;
+  flex: 0 0 auto;
   border: 1px solid #d7d8d5;
   border-radius: 6px;
   overflow: hidden;
