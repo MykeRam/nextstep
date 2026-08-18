@@ -159,6 +159,9 @@ h2 {
 .auth-message {
   color: #4953b8 !important;
 }
+.auth-error {
+  color: #a54747 !important;
+}
 .section-heading,
 .toolbar {
   display: flex;

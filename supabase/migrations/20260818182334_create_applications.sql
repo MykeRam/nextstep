@@ -1,5 +1,5 @@
 create table public.applications (
-  id uuid primary key default gen_random_uuid(),
+  id text primary key,
   user_id uuid not null references auth.users (id) on delete cascade,
   company text not null check (char_length(trim(company)) > 0),
   role text not null check (char_length(trim(role)) > 0),

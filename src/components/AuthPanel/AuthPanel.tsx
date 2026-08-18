@@ -6,6 +6,8 @@ type AuthPanelProps = {
   loading: boolean;
   onSendMagicLink: (email: string) => Promise<string | null>;
   onSignOut: () => Promise<void>;
+  syncError: string;
+  syncing: boolean;
   user: User | null;
 };
 
@@ -14,6 +16,8 @@ export function AuthPanel({
   loading,
   onSendMagicLink,
   onSignOut,
+  syncError,
+  syncing,
   user,
 }: AuthPanelProps) {
   const [email, setEmail] = useState('');
@@ -47,7 +51,12 @@ export function AuthPanel({
   if (user) {
     return (
       <section className="auth-panel auth-panel_signed-in" aria-label="Account status">
-        <p>Signed in as {user.email}</p>
+        <div>
+          <p>Signed in as {user.email}</p>
+          <p className={syncError ? 'auth-error' : 'auth-message'}>
+            {syncError || (syncing ? 'Syncing applications…' : 'Cloud sync is active.')}
+          </p>
+        </div>
         <button className="link-button" onClick={onSignOut}>
           Sign out
         </button>

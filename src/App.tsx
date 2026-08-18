@@ -9,6 +9,12 @@ import { StatusSummary } from './components/StatusSummary/StatusSummary';
 import { emptyDraft } from './data/starterApplications';
 import { useAuth } from './hooks/useAuth';
 import {
+  deleteCloudApplication,
+  fetchCloudApplications,
+  seedCloudApplications,
+  upsertCloudApplication,
+} from './services/applications';
+import {
   Application,
   ApplicationDraft,
   SortOption,
@@ -27,10 +33,47 @@ export default function App() {
   const [view, setView] = useState<View>('list');
   const [draft, setDraft] = useState<ApplicationDraft>(emptyDraft);
   const [editingId, setEditingId] = useState<string | null>(null);
+  const [cloudSyncing, setCloudSyncing] = useState(false);
+  const [syncError, setSyncError] = useState('');
 
   useEffect(() => {
     localStorage.setItem('nextstep-applications', JSON.stringify(applications));
   }, [applications]);
+
+  useEffect(() => {
+    if (!user) {
+      setCloudSyncing(false);
+      setSyncError('');
+      return;
+    }
+
+    const userId = user.id;
+    let active = true;
+
+    async function syncCloudApplications() {
+      setCloudSyncing(true);
+      const { applications: cloudApplications, error } = await fetchCloudApplications(userId);
+
+      if (!active) return;
+
+      if (error) {
+        setSyncError(error);
+      } else if (cloudApplications.length > 0) {
+        setApplications(cloudApplications);
+      } else {
+        const migrationError = await seedCloudApplications(applications, userId);
+        if (active && migrationError) setSyncError(migrationError);
+      }
+
+      if (active) setCloudSyncing(false);
+    }
+
+    void syncCloudApplications();
+
+    return () => {
+      active = false;
+    };
+  }, [user?.id]);
 
   const visibleApplications = useMemo(
     () =>
@@ -81,14 +124,22 @@ export default function App() {
     event.preventDefault();
     if (!draft.company.trim() || !draft.role.trim()) return;
 
+    const applicationToSave = { ...draft, id: editingId ?? crypto.randomUUID() };
+
     if (editingId) {
       setApplications((current) =>
         current.map((application) =>
-          application.id === editingId ? { ...draft, id: editingId } : application,
+          application.id === editingId ? applicationToSave : application,
         ),
       );
     } else {
-      setApplications((current) => [{ ...draft, id: crypto.randomUUID() }, ...current]);
+      setApplications((current) => [applicationToSave, ...current]);
+    }
+
+    if (user) {
+      void upsertCloudApplication(applicationToSave, user.id).then((error) =>
+        setSyncError(error ?? ''),
+      );
     }
 
     setDraft(emptyDraft);
@@ -110,14 +161,25 @@ export default function App() {
   function deleteApplication(id: string) {
     setApplications((current) => current.filter((application) => application.id !== id));
     if (editingId === id) cancelEdit();
+
+    if (user) {
+      void deleteCloudApplication(id).then((error) => setSyncError(error ?? ''));
+    }
   }
 
   function updateApplicationStatus(id: string, status: Status) {
+    const updatedApplication = applications.find((application) => application.id === id);
     setApplications((current) =>
       current.map((application) =>
         application.id === id ? { ...application, status } : application,
       ),
     );
+
+    if (user && updatedApplication) {
+      void upsertCloudApplication({ ...updatedApplication, status }, user.id).then((error) =>
+        setSyncError(error ?? ''),
+      );
+    }
   }
 
   function filterByStatus(status: Status) {
@@ -133,6 +195,8 @@ export default function App() {
         loading={loading}
         onSendMagicLink={sendMagicLink}
         onSignOut={signOut}
+        syncError={syncError}
+        syncing={cloudSyncing}
         user={user}
       />
       <StatusSummary
