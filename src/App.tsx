@@ -55,10 +55,11 @@ export default function App() {
   function cancelEdit() { setDraft(emptyDraft); setEditingId(null); }
   function deleteApplication(id: string) { setApplications((current) => current.filter((application) => application.id !== id)); if (editingId === id) cancelEdit(); }
   function updateApplicationStatus(id: string, status: Status) { setApplications((current) => current.map((application) => application.id === id ? { ...application, status } : application)); }
+  function filterByStatus(status: Status) { setStatusFilter((current) => current === status ? 'All' : status); setView('list'); }
 
   return <main className="app-shell">
     <header><div><p className="eyebrow">JOB APPLICATION COMMAND CENTER</p><h1>NextStep</h1><p className="subtitle">Keep your opportunities and next moves in one place.</p></div><div className="summary"><strong>{applications.length}</strong><span>applications</span></div></header>
-    <section className="status-summary" aria-label="Application status summary">{STATUSES.map((status) => <article key={status}><strong>{statusCounts[status]}</strong><span>{status}</span></article>)}</section>
+    <section className="status-summary" aria-label="Application status summary">{STATUSES.map((status) => <button key={status} className={statusFilter === status ? 'active' : ''} aria-pressed={statusFilter === status} onClick={() => filterByStatus(status)}><strong>{statusCounts[status]}</strong><span>{status}</span></button>)}</section>
     <section className="card follow-ups-card" aria-labelledby="follow-ups-title"><div className="section-heading"><div><h2 id="follow-ups-title">Upcoming follow-ups</h2><p>Keep your next action in view.</p></div><span className="follow-up-count">{upcomingFollowUps.length} scheduled</span></div>
       {upcomingFollowUps.length === 0 ? <p className="empty-state">No follow-ups scheduled yet.</p> : <ul className="follow-ups-list">{upcomingFollowUps.map((application) => { const overdue = new Date(`${application.followUpDate}T00:00:00`) < today; return <li key={application.id}><div><strong>{application.company}</strong><span>{application.role}</span></div><time className={overdue ? 'overdue' : ''}>{overdue ? `Overdue · ${formatDate(application.followUpDate)}` : formatDate(application.followUpDate)}</time><button onClick={() => editApplication(application)}>Edit</button></li>; })}</ul>}
     </section>
