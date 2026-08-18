@@ -30,6 +30,7 @@ export default function App() {
     const searchable = `${application.company} ${application.role} ${application.location}`.toLowerCase();
     return matchesStatus && searchable.includes(query.toLowerCase());
   }), [applications, query, statusFilter]);
+  const statusCounts = Object.fromEntries(STATUSES.map((status) => [status, applications.filter((application) => application.status === status).length])) as Record<Status, number>;
   const updateDraft = (field: keyof Draft, value: string) => setDraft((current) => ({ ...current, [field]: value }));
 
   function saveApplication(event: FormEvent<HTMLFormElement>) {
@@ -45,6 +46,7 @@ export default function App() {
 
   return <main className="app-shell">
     <header><div><p className="eyebrow">JOB APPLICATION COMMAND CENTER</p><h1>NextStep</h1><p className="subtitle">Keep your opportunities and next moves in one place.</p></div><div className="summary"><strong>{applications.length}</strong><span>applications</span></div></header>
+    <section className="status-summary" aria-label="Application status summary">{STATUSES.map((status) => <article key={status}><strong>{statusCounts[status]}</strong><span>{status}</span></article>)}</section>
     <section className="card form-card"><div className="section-heading"><h2>{editingId ? 'Edit application' : 'Add an application'}</h2>{editingId && <button className="link-button" onClick={cancelEdit}>Cancel</button>}</div>
       <form onSubmit={saveApplication}>
         <label>Company<input required value={draft.company} onChange={(event) => updateDraft('company', event.target.value)} placeholder="e.g. Acme Inc." /></label>
