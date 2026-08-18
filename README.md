@@ -23,6 +23,18 @@ NextStep is a simple job application command center. It helps job seekers keep a
 - Vite
 - Plain CSS
 
+## Project structure
+
+```text
+src/
+├── components/  # Reusable UI sections, grouped by component
+├── data/        # Demo application data and form defaults
+├── types/       # Shared TypeScript types
+├── utils/       # Storage and date-formatting helpers
+├── App.tsx      # Application state and component composition
+└── styles.css   # Shared application styles
+```
+
 ## Run locally
 
 ```bash
