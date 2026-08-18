@@ -44,6 +44,17 @@ npm run dev
 
 Vite automatically opens the app in your default browser. To stop the server, press `Ctrl+C` in the terminal.
 
+## Cloud sync setup
+
+NextStep includes the Supabase client, an email sign-in flow, and a secure applications migration. To enable cloud sync:
+
+1. Create a Supabase project and run the SQL file in `supabase/migrations/` through the Supabase SQL Editor.
+2. Copy `.env.example` to `.env.local`, then add the project's URL and publishable key.
+3. In Supabase Auth settings, add `http://localhost:5173` and `https://mykeram.github.io/nextstep/` as redirect URLs.
+4. In this GitHub repository's Actions variables, add `VITE_SUPABASE_URL` and `VITE_SUPABASE_PUBLISHABLE_KEY` so the deployed build can connect.
+
+The publishable key is safe for browser use because the `applications` table is protected by row-level security; never add a Supabase secret or service-role key to the frontend or repository variables.
+
 Useful commands:
 
 ```bash
