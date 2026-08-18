@@ -6,9 +6,12 @@ NextStep is a simple job application command center. It helps job seekers keep a
 
 - Add job applications with company, role, location, status, applied date, follow-up date, and notes
 - Edit or delete applications
+- Update an application's status directly from the list or board
 - Search applications by company, role, or location
 - Filter applications by status
 - View a live count for every application stage
+- View applications in list or board form
+- See upcoming follow-ups in date order, with overdue items highlighted
 - Save data in the browser with `localStorage`
 
 ## Tech stack
@@ -30,7 +33,7 @@ Vite automatically opens the app in your default browser. To stop the server, pr
 ## Planned next steps
 
 - Add user accounts and cloud-based storage with Supabase
-- Add a Kanban board and calendar view
+- Add a calendar view and follow-up reminders
 - Add dashboard insights and follow-up reminders
 - Add résumé and job-description matching
 
