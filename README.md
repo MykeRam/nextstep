@@ -14,6 +14,8 @@ NextStep is a simple job application command center. It helps job seekers keep a
 - Switch between list and responsive board views without horizontal scrolling
 - See upcoming follow-ups in date order, with overdue items highlighted
 - Save data in the browser with `localStorage`
+- Sign in with a passwordless email magic link
+- Sync signed-in users' applications securely to Supabase
 - Includes eight realistic demo applications across every status, with a one-time migration for earlier demo data
 
 ## Tech stack
@@ -29,6 +31,9 @@ NextStep is a simple job application command center. It helps job seekers keep a
 src/
 ├── components/  # Reusable UI sections, grouped by component
 ├── data/        # Demo application data and form defaults
+├── hooks/        # Reusable React hooks, including authentication
+├── lib/          # Third-party client configuration
+├── services/     # Supabase application data operations
 ├── types/       # Shared TypeScript types
 ├── utils/       # Storage and date-formatting helpers
 ├── App.tsx      # Application state and component composition
@@ -44,14 +49,15 @@ npm run dev
 
 Vite automatically opens the app in your default browser. To stop the server, press `Ctrl+C` in the terminal.
 
-## Cloud sync setup
+## Sign-in and cloud sync
 
-NextStep includes the Supabase client, an email sign-in flow, and a secure applications migration. To enable cloud sync:
+NextStep uses Supabase for passwordless email authentication and cloud storage.
 
-1. Create a Supabase project and run the SQL file in `supabase/migrations/` through the Supabase SQL Editor.
-2. Copy `.env.example` to `.env.local`, then add the project's URL and publishable key.
-3. In Supabase Auth settings, add `http://localhost:5173` and `https://mykeram.github.io/nextstep/` as redirect URLs.
-4. In this GitHub repository's Actions variables, add `VITE_SUPABASE_URL` and `VITE_SUPABASE_PUBLISHABLE_KEY` so the deployed build can connect.
+Enter an email address in the app to receive a one-time magic link. Supabase creates an account automatically for a new email address, then returns the user to NextStep with an active session.
+
+While signed in, NextStep loads that user's saved applications from Supabase. On a first sign-in, it copies the current browser applications to the user's cloud account. Later adds, edits, status changes, and deletions are synced to the cloud. Signed-out use remains local to the browser with `localStorage`.
+
+The hosted project is configured with a Supabase database migration, row-level security, GitHub Actions variables, and the production redirect URL. For local development, copy `.env.example` to `.env.local` and add the project's URL and publishable key.
 
 The publishable key is safe for browser use because the `applications` table is protected by row-level security; never add a Supabase secret or service-role key to the frontend or repository variables.
 
@@ -75,10 +81,10 @@ npm run build
 - [x] Surface upcoming follow-ups and overdue items
 - [x] Add realistic demo data across every application stage
 - [x] Add Prettier formatting and production-build checks
+- [x] Add passwordless sign-in and secure cloud-based storage with Supabase
 
 ### Next steps
 
-- [ ] Add user accounts and cloud-based storage with Supabase
 - [ ] Add a calendar view and scheduled follow-up reminders
 - [ ] Add dashboard insights
 - [ ] Add an AI Job Fit Analyzer with a secure server-side OpenAI integration
@@ -88,4 +94,4 @@ npm run build
 
 ## Project status
 
-This is an active portfolio project. The MVP now covers a complete local application-tracking workflow, with AI guidance, cloud sync, reminders, and insights planned next.
+This is an active portfolio project. The MVP now covers a complete local and cloud-synced application-tracking workflow, with reminders, insights, and AI guidance planned next.
