@@ -2,6 +2,7 @@ import { FormEvent, useEffect, useMemo, useState } from 'react';
 
 import { ApplicationForm } from './components/ApplicationForm/ApplicationForm';
 import { AppHeader } from './components/AppHeader/AppHeader';
+import { DashboardInsights } from './components/DashboardInsights/DashboardInsights';
 import { AppFooter } from './components/AppFooter/AppFooter';
 import { Applications } from './components/Applications/Applications';
 import { AuthPanel } from './components/AuthPanel/AuthPanel';
@@ -206,6 +207,7 @@ export default function App() {
         statusCounts={statusCounts}
         onFilter={filterByStatus}
       />
+      <DashboardInsights applications={applications} onEdit={editApplication} />
       <FollowUpReminders applications={upcomingFollowUps} onEdit={editApplication} />
       <FollowUps applications={upcomingFollowUps} onEdit={editApplication} />
       <ApplicationForm
