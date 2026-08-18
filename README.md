@@ -15,6 +15,7 @@ NextStep is a simple job application command center. It helps job seekers keep a
 - See upcoming follow-ups in date order, with overdue items highlighted
 - Switch between a follow-up list and month calendar view
 - Receive in-app reminders for overdue and due-today follow-ups
+- Track pipeline health, response rate, monthly submissions, offers, and next actions with dashboard insights
 - Save data in the browser with `localStorage`
 - Sign in with a passwordless email magic link
 - Sync signed-in users' applications securely to Supabase
@@ -88,11 +89,11 @@ npm run build
 - [x] Add Prettier formatting and production-build checks
 - [x] Add passwordless sign-in and secure cloud-based storage with Supabase
 - [x] Add a follow-up calendar and in-app overdue/due-today reminders
+- [x] Add dashboard insights for pipeline health and next actions
 
 ### Next steps
 
 - [ ] Add scheduled email or push follow-up reminders
-- [ ] Add dashboard insights
 - [ ] Add an AI Job Fit Analyzer with a secure server-side OpenAI integration
   - Compare a saved résumé against each job description
   - Return a match score, matching skills, and skill gaps
@@ -100,4 +101,4 @@ npm run build
 
 ## Project status
 
-This is an active portfolio project. The MVP now covers a complete local and cloud-synced application-tracking workflow, with scheduled reminders, insights, and AI guidance planned next.
+This is an active portfolio project. The MVP now covers a complete local and cloud-synced application-tracking workflow, with scheduled reminders and AI guidance planned next.
