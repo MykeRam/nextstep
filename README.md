@@ -1,13 +1,14 @@
 # NextStep
 
-NextStep is a simple job application command center. It helps job seekers keep applications, statuses, and notes in one place instead of managing everything in a spreadsheet.
+NextStep is a simple job application command center. It helps job seekers keep applications, status updates, follow-up dates, and notes in one place instead of managing everything in a spreadsheet.
 
 ## Current features
 
-- Add job applications with company, role, location, status, date, and notes
+- Add job applications with company, role, location, status, applied date, follow-up date, and notes
 - Edit or delete applications
 - Search applications by company, role, or location
 - Filter applications by status
+- View a live count for every application stage
 - Save data in the browser with `localStorage`
 
 ## Tech stack
@@ -24,7 +25,7 @@ npm install
 npm run dev
 ```
 
-Then open the local URL shown in your terminal.
+Vite automatically opens the app in your default browser. To stop the server, press `Ctrl+C` in the terminal.
 
 ## Planned next steps
 
