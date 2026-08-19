@@ -225,7 +225,7 @@ export default function App() {
           user={user}
         />
       </div>
-      <div className="dashboard-stage" style={{ '--entrance-order': 1 } as React.CSSProperties}>
+      <div className="dashboard-stage dashboard-stage_status">
         <StatusSummary
           activeStatus={statusFilter}
           statusCounts={statusCounts}
