@@ -44,9 +44,19 @@ button {
 .dashboard-entrance .dashboard-stage_status {
   animation: none;
 }
+.dashboard-entrance .dashboard-stage_status .status-summary {
+  background: transparent;
+  border-color: transparent;
+  border-radius: 0;
+  gap: 8px;
+  overflow: visible;
+}
 .dashboard-entrance .dashboard-stage_status .status-summary button {
   animation: status-summary-enter 360ms cubic-bezier(0.16, 1, 0.3, 1) both;
   animation-delay: 1.86s;
+  background: #fff;
+  border: 1px solid #e3e3df;
+  border-radius: 10px;
 }
 .dashboard-entrance .dashboard-stage_status .status-summary button:nth-child(2) {
   animation-delay: 1.98s;
