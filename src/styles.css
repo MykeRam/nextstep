@@ -228,6 +228,18 @@ header {
   align-items: end;
   margin-bottom: 30px;
 }
+.app-header {
+  justify-content: center;
+  position: relative;
+}
+.app-header > div:first-child {
+  text-align: center;
+}
+.app-header .summary {
+  bottom: 0;
+  position: absolute;
+  right: 0;
+}
 .eyebrow {
   color: #6b7280;
   font-size: 11px;

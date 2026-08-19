@@ -4,7 +4,7 @@ type AppHeaderProps = {
 
 export function AppHeader({ applicationCount }: AppHeaderProps) {
   return (
-    <header>
+    <header className="app-header">
       <div>
         <h1>NextStep</h1>
         <p className="subtitle">Keep your opportunities and next moves in one place.</p>
