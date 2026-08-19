@@ -1,4 +1,4 @@
-import { FormEvent, useState } from 'react';
+import { FormEvent, useEffect, useState } from 'react';
 import { User } from '@supabase/supabase-js';
 
 type AuthPanelProps = {
@@ -6,6 +6,7 @@ type AuthPanelProps = {
   loading: boolean;
   onSendMagicLink: (email: string) => Promise<string | null>;
   onSignOut: () => Promise<void>;
+  shouldAnimate: boolean;
   syncError: string;
   syncing: boolean;
   user: User | null;
@@ -16,6 +17,7 @@ export function AuthPanel({
   loading,
   onSendMagicLink,
   onSignOut,
+  shouldAnimate,
   syncError,
   syncing,
   user,
@@ -23,6 +25,60 @@ export function AuthPanel({
   const [email, setEmail] = useState('');
   const [message, setMessage] = useState('');
   const [submitting, setSubmitting] = useState(false);
+  const [typedEmail, setTypedEmail] = useState('');
+  const [showSyncStatus, setShowSyncStatus] = useState(!shouldAnimate);
+  const [prefersReducedMotion, setPrefersReducedMotion] = useState(
+    () => window.matchMedia('(prefers-reduced-motion: reduce)').matches,
+  );
+
+  useEffect(() => {
+    const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
+    const updatePreference = () => setPrefersReducedMotion(mediaQuery.matches);
+
+    mediaQuery.addEventListener('change', updatePreference);
+    return () => mediaQuery.removeEventListener('change', updatePreference);
+  }, []);
+
+  useEffect(() => {
+    if (!user) return;
+
+    if (!shouldAnimate || prefersReducedMotion) {
+      setTypedEmail(user.email ?? '');
+      setShowSyncStatus(true);
+      return;
+    }
+
+    const email = user.email ?? '';
+    let characterIndex = 0;
+    let typingInterval: number | undefined;
+    let typingStartTimeout: number | undefined;
+    let syncStatusTimeout: number | undefined;
+    setTypedEmail('');
+    setShowSyncStatus(false);
+
+    if (!email) {
+      setShowSyncStatus(true);
+      return;
+    }
+
+    typingStartTimeout = window.setTimeout(() => {
+      typingInterval = window.setInterval(() => {
+        characterIndex += 1;
+        setTypedEmail(email.slice(0, characterIndex));
+
+        if (characterIndex === email.length) {
+          window.clearInterval(typingInterval);
+          syncStatusTimeout = window.setTimeout(() => setShowSyncStatus(true), 180);
+        }
+      }, 30);
+    }, 1320);
+
+    return () => {
+      if (typingStartTimeout) window.clearTimeout(typingStartTimeout);
+      if (typingInterval) window.clearInterval(typingInterval);
+      if (syncStatusTimeout) window.clearTimeout(syncStatusTimeout);
+    };
+  }, [prefersReducedMotion, shouldAnimate, user]);
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -49,13 +105,23 @@ export function AuthPanel({
   }
 
   if (user) {
+    const statusMessage =
+      syncError || (syncing ? 'Syncing applications…' : 'Cloud sync is active.');
+    const shouldShine = showSyncStatus && !syncError && !syncing;
+
     return (
       <section className="auth-panel auth-panel_signed-in" aria-label="Account status">
         <div>
-          <p>Signed in as {user.email}</p>
-          <p className={syncError ? 'auth-error' : 'auth-message'}>
-            {syncError || (syncing ? 'Syncing applications…' : 'Cloud sync is active.')}
+          <p aria-label={`Signed in as ${user.email}`}>
+            <span aria-hidden="true">Signed in as {typedEmail}</span>
           </p>
+          {showSyncStatus && (
+            <p
+              className={`${syncError ? 'auth-error' : 'auth-message'}${shouldShine ? ' auth-message_shine' : ''}`}
+            >
+              {statusMessage}
+            </p>
+          )}
         </div>
         <button className="link-button" onClick={onSignOut}>
           Sign out

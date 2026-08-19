@@ -10,6 +10,7 @@ function getRedirectUrl() {
 export function useAuth() {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(isSupabaseConfigured);
+  const [shouldAnimateDashboard, setShouldAnimateDashboard] = useState(false);
 
   useEffect(() => {
     if (!supabase) {
@@ -24,9 +25,12 @@ export function useAuth() {
 
     const {
       data: { subscription },
-    } = supabase.auth.onAuthStateChange((_event, session) => {
+    } = supabase.auth.onAuthStateChange((event, session) => {
       setUser(session?.user ?? null);
       setLoading(false);
+
+      if (event === 'SIGNED_IN') setShouldAnimateDashboard(true);
+      if (event === 'SIGNED_OUT') setShouldAnimateDashboard(false);
     });
 
     return () => subscription.unsubscribe();
@@ -49,5 +53,12 @@ export function useAuth() {
     await supabase.auth.signOut();
   }
 
-  return { isConfigured: isSupabaseConfigured, loading, sendMagicLink, signOut, user };
+  return {
+    isConfigured: isSupabaseConfigured,
+    loading,
+    sendMagicLink,
+    shouldAnimateDashboard,
+    signOut,
+    user,
+  };
 }

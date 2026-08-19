@@ -30,6 +30,30 @@ button {
   margin: 0 auto;
   padding: 56px 0 80px;
 }
+.dashboard-entrance .dashboard-stage {
+  animation: dashboard-enter 460ms both;
+  animation-delay: calc(140ms + (var(--entrance-order, 0) * 85ms));
+}
+.dashboard-entrance .dashboard-stage_header {
+  animation-delay: 0ms;
+}
+.dashboard-entrance .dashboard-stage_account {
+  animation-delay: 1.28s;
+}
+@keyframes dashboard-enter {
+  0% {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+  72% {
+    opacity: 1;
+    transform: translateY(-3px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
 .landing-shell {
   width: min(100% - 32px, 980px);
   margin: 0 auto;
@@ -286,6 +310,35 @@ h2 {
 }
 .auth-message {
   color: #4953b8 !important;
+}
+.auth-message_shine {
+  background: linear-gradient(
+    100deg,
+    #4953b8 0%,
+    #4953b8 35%,
+    #9ba3ff 50%,
+    #4953b8 65%,
+    #4953b8 100%
+  );
+  background-clip: text;
+  background-size: 220% 100%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: sync-shine 900ms ease-out both;
+}
+@keyframes sync-shine {
+  from {
+    background-position: 100% 0;
+  }
+  to {
+    background-position: -120% 0;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .dashboard-entrance .dashboard-stage,
+  .auth-message_shine {
+    animation: none;
+  }
 }
 .auth-error {
   color: #a54747 !important;

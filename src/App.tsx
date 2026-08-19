@@ -29,7 +29,7 @@ import {
 import { loadApplications } from './utils/applications';
 
 export default function App() {
-  const { isConfigured, loading, sendMagicLink, signOut, user } = useAuth();
+  const { isConfigured, loading, sendMagicLink, shouldAnimateDashboard, signOut, user } = useAuth();
   const [applications, setApplications] = useState<Application[]>(loadApplications);
   const [statusFilter, setStatusFilter] = useState<Status | 'All'>('All');
   const [query, setQuery] = useState('');
@@ -204,48 +204,70 @@ export default function App() {
   }
 
   return (
-    <main className="app-shell">
-      <AppHeader applicationCount={applications.length} />
-      <AuthPanel
-        isConfigured={isConfigured}
-        loading={loading}
-        onSendMagicLink={sendMagicLink}
-        onSignOut={signOut}
-        syncError={syncError}
-        syncing={cloudSyncing}
-        user={user}
-      />
-      <StatusSummary
-        activeStatus={statusFilter}
-        statusCounts={statusCounts}
-        onFilter={filterByStatus}
-      />
-      <DashboardInsights applications={applications} onEdit={editApplication} />
-      <FollowUpReminders applications={upcomingFollowUps} onEdit={editApplication} />
-      <FollowUps applications={upcomingFollowUps} onEdit={editApplication} />
-      <ApplicationForm
-        draft={draft}
-        editing={Boolean(editingId)}
-        onCancel={cancelEdit}
-        onChange={updateDraft}
-        onSubmit={saveApplication}
-      />
-      <Applications
-        applications={visibleApplications}
-        boardStatuses={boardStatuses}
-        query={query}
-        sortBy={sortBy}
-        statusFilter={statusFilter}
-        view={view}
-        onDelete={deleteApplication}
-        onEdit={editApplication}
-        onQueryChange={setQuery}
-        onSortChange={setSortBy}
-        onStatusChange={updateApplicationStatus}
-        onStatusFilterChange={setStatusFilter}
-        onViewChange={setView}
-      />
-      <AppFooter />
+    <main className={`app-shell${shouldAnimateDashboard ? ' dashboard-entrance' : ''}`}>
+      <div className="dashboard-stage dashboard-stage_header">
+        <AppHeader applicationCount={applications.length} />
+      </div>
+      <div
+        className="dashboard-stage dashboard-stage_account"
+        style={{ '--entrance-order': 8 } as React.CSSProperties}
+      >
+        <AuthPanel
+          isConfigured={isConfigured}
+          loading={loading}
+          onSendMagicLink={sendMagicLink}
+          onSignOut={signOut}
+          shouldAnimate={shouldAnimateDashboard}
+          syncError={syncError}
+          syncing={cloudSyncing}
+          user={user}
+        />
+      </div>
+      <div className="dashboard-stage" style={{ '--entrance-order': 1 } as React.CSSProperties}>
+        <StatusSummary
+          activeStatus={statusFilter}
+          statusCounts={statusCounts}
+          onFilter={filterByStatus}
+        />
+      </div>
+      <div className="dashboard-stage" style={{ '--entrance-order': 2 } as React.CSSProperties}>
+        <DashboardInsights applications={applications} onEdit={editApplication} />
+      </div>
+      <div className="dashboard-stage" style={{ '--entrance-order': 3 } as React.CSSProperties}>
+        <FollowUpReminders applications={upcomingFollowUps} onEdit={editApplication} />
+      </div>
+      <div className="dashboard-stage" style={{ '--entrance-order': 4 } as React.CSSProperties}>
+        <FollowUps applications={upcomingFollowUps} onEdit={editApplication} />
+      </div>
+      <div className="dashboard-stage" style={{ '--entrance-order': 5 } as React.CSSProperties}>
+        <ApplicationForm
+          draft={draft}
+          editing={Boolean(editingId)}
+          onCancel={cancelEdit}
+          onChange={updateDraft}
+          onSubmit={saveApplication}
+        />
+      </div>
+      <div className="dashboard-stage" style={{ '--entrance-order': 6 } as React.CSSProperties}>
+        <Applications
+          applications={visibleApplications}
+          boardStatuses={boardStatuses}
+          query={query}
+          sortBy={sortBy}
+          statusFilter={statusFilter}
+          view={view}
+          onDelete={deleteApplication}
+          onEdit={editApplication}
+          onQueryChange={setQuery}
+          onSortChange={setSortBy}
+          onStatusChange={updateApplicationStatus}
+          onStatusFilterChange={setStatusFilter}
+          onViewChange={setView}
+        />
+      </div>
+      <div className="dashboard-stage" style={{ '--entrance-order': 7 } as React.CSSProperties}>
+        <AppFooter />
+      </div>
     </main>
   );
 }
