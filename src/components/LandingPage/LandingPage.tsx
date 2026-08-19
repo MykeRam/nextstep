@@ -49,7 +49,7 @@ export function LandingPage({ isConfigured, onSendMagicLink }: LandingPageProps)
           </p>
         </div>
         <section className="landing-sign-in" aria-labelledby="sign-in-title">
-          <h2 id="sign-in-title">Open your demo workspace</h2>
+          <h2 id="sign-in-title">Get Started</h2>
           <p>Enter your email and we’ll send a secure, passwordless sign-in link.</p>
           <form className="landing-auth-form" onSubmit={handleSubmit}>
             <label>
