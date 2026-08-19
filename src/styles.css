@@ -30,6 +30,116 @@ button {
   margin: 0 auto;
   padding: 56px 0 80px;
 }
+.landing-shell {
+  width: min(100% - 32px, 980px);
+  margin: 0 auto;
+  min-height: 100vh;
+  padding: 56px 0 40px;
+}
+.landing-shell_loading {
+  align-items: center;
+  color: #62666c;
+  display: flex;
+  font-size: 14px;
+  justify-content: center;
+}
+.landing-hero {
+  align-items: center;
+  display: grid;
+  gap: 48px;
+  grid-template-columns: 1.1fr 0.9fr;
+  min-height: 470px;
+}
+.landing-intro {
+  max-width: 540px;
+}
+.landing-brand {
+  color: #4953b8;
+  font-size: 11px;
+  font-weight: 750;
+  letter-spacing: 0.12em;
+  margin-bottom: 14px;
+}
+.landing-intro h1 {
+  font-size: clamp(38px, 5vw, 58px);
+  letter-spacing: -2.4px;
+  line-height: 1.03;
+  margin-bottom: 18px;
+}
+.landing-intro > p:last-child {
+  color: #62666c;
+  font-size: 17px;
+  line-height: 1.55;
+  margin-bottom: 0;
+  max-width: 485px;
+}
+.landing-sign-in {
+  background: #fff;
+  border: 1px solid #e3e3df;
+  border-radius: 12px;
+  padding: 28px;
+}
+.landing-sign-in h2 {
+  font-size: 19px;
+}
+.landing-sign-in > p {
+  color: #62666c;
+  font-size: 13px;
+  line-height: 1.5;
+  margin: 8px 0 0;
+}
+.landing-auth-form {
+  display: grid;
+  gap: 12px;
+  grid-template-columns: 1fr;
+  margin-top: 22px;
+}
+.landing-auth-form .primary-button {
+  width: 100%;
+}
+.landing-auth-message,
+.landing-auth-error {
+  font-size: 12px !important;
+  margin-top: 12px !important;
+}
+.landing-auth-message {
+  color: #4953b8 !important;
+}
+.landing-auth-error {
+  color: #a54747 !important;
+}
+.landing-sign-in small {
+  color: #73777d;
+  display: block;
+  font-size: 11px;
+  line-height: 1.45;
+  margin-top: 18px;
+}
+.landing-benefits {
+  border-top: 1px solid #e3e3df;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+}
+.landing-benefits article {
+  border-right: 1px solid #e3e3df;
+  padding: 24px 28px;
+}
+.landing-benefits article:first-child {
+  padding-left: 0;
+}
+.landing-benefits article:last-child {
+  border-right: 0;
+  padding-right: 0;
+}
+.landing-benefits h2 {
+  font-size: 14px;
+}
+.landing-benefits p {
+  color: #62666c;
+  font-size: 12px;
+  line-height: 1.5;
+  margin: 8px 0 0;
+}
 .app-footer {
   color: #73777d;
   font-size: 12px;
@@ -716,6 +826,25 @@ time {
 @media (max-width: 700px) {
   .app-shell {
     padding-top: 32px;
+  }
+  .landing-shell {
+    padding-top: 32px;
+  }
+  .landing-hero {
+    gap: 30px;
+    grid-template-columns: 1fr;
+    min-height: auto;
+    padding: 34px 0 46px;
+  }
+  .landing-benefits {
+    grid-template-columns: 1fr;
+  }
+  .landing-benefits article,
+  .landing-benefits article:first-child,
+  .landing-benefits article:last-child {
+    border-bottom: 1px solid #e3e3df;
+    border-right: 0;
+    padding: 18px 0;
   }
   header {
     align-items: start;

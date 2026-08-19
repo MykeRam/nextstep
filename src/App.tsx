@@ -8,6 +8,7 @@ import { Applications } from './components/Applications/Applications';
 import { AuthPanel } from './components/AuthPanel/AuthPanel';
 import { FollowUps } from './components/FollowUps/FollowUps';
 import { FollowUpReminders } from './components/FollowUpReminders/FollowUpReminders';
+import { LandingPage } from './components/LandingPage/LandingPage';
 import { StatusSummary } from './components/StatusSummary/StatusSummary';
 import { emptyDraft } from './data/starterApplications';
 import { useAuth } from './hooks/useAuth';
@@ -188,6 +189,18 @@ export default function App() {
   function filterByStatus(status: Status) {
     setStatusFilter((current) => (current === status ? 'All' : status));
     setView('list');
+  }
+
+  if (loading) {
+    return (
+      <main className="landing-shell landing-shell_loading">
+        <p>Checking your secure session…</p>
+      </main>
+    );
+  }
+
+  if (!user) {
+    return <LandingPage isConfigured={isConfigured} onSendMagicLink={sendMagicLink} />;
   }
 
   return (
