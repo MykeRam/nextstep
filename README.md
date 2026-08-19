@@ -20,6 +20,8 @@ NextStep is a simple job application command center. It helps job seekers keep a
 - Sign in with a passwordless email magic link
 - Sync signed-in users' applications securely to Supabase
 - Start from a minimal landing page and open the dashboard after secure sign-in
+- Use a staged dashboard entrance with an account-status typing effect, cloud-sync shine, and sequential status cards
+- Respect reduced-motion preferences so the dashboard remains immediately accessible
 - Link to the developer portfolio from the footer
 - Includes eight realistic demo applications across every status, with a one-time migration for earlier demo data
 
@@ -31,6 +33,12 @@ NextStep is a simple job application command center. It helps job seekers keep a
 - Plain CSS
 - Supabase Auth and Postgres
 - GitHub Pages
+
+## Dashboard motion
+
+The signed-in dashboard introduces information in a deliberate order: the header enters first, the workspace sections follow, the signed-in account panel types the email address and reveals cloud-sync confirmation, and the five application-status cards arrive individually from left to right.
+
+The motion uses CSS only and honors `prefers-reduced-motion`, which shows all content immediately without animated movement, typing, or shine effects.
 
 ## Project structure
 
