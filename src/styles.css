@@ -36,6 +36,7 @@ button {
 }
 .dashboard-entrance .dashboard-stage_header {
   animation-delay: 0ms;
+  animation-duration: 1.2s;
 }
 .dashboard-entrance .dashboard-stage_account {
   animation-delay: 1.28s;
