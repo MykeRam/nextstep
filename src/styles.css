@@ -398,6 +398,11 @@ textarea {
   font-weight: 650;
   font-size: 13px;
 }
+.form-card form > .primary-button {
+  grid-column: 3;
+  justify-self: end;
+  width: 200px;
+}
 .section-heading p {
   color: #73777d;
   font-size: 12px;
@@ -874,6 +879,9 @@ time {
   .primary-button {
     grid-column: span 2;
   }
+  .form-card form > .primary-button {
+    grid-column: 2;
+  }
   .toolbar {
     align-items: start;
     gap: 12px;
@@ -967,6 +975,11 @@ time {
   .wide,
   .primary-button {
     grid-column: auto;
+  }
+  .form-card form > .primary-button {
+    grid-column: 1;
+    justify-self: stretch;
+    width: 100%;
   }
   .follow-ups-actions {
     align-items: end;
