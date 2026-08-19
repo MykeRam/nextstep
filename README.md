@@ -19,6 +19,7 @@ NextStep is a simple job application command center. It helps job seekers keep a
 - Save data in the browser with `localStorage`
 - Sign in with a passwordless email magic link
 - Sync signed-in users' applications securely to Supabase
+- Start from a minimal landing page and open the dashboard after secure sign-in
 - Link to the developer portfolio from the footer
 - Includes eight realistic demo applications across every status, with a one-time migration for earlier demo data
 
@@ -59,9 +60,9 @@ Vite automatically opens the app in your default browser. To stop the server, pr
 
 NextStep uses Supabase for passwordless email authentication and cloud storage.
 
-Enter an email address in the app to receive a one-time magic link. Supabase creates an account automatically for a new email address, then returns the user to NextStep with an active session.
+Visitors start on a minimal landing page. Enter an email address to receive a one-time magic link. Supabase creates an account automatically for a new email address, then returns the user to the protected NextStep dashboard with an active session.
 
-While signed in, NextStep loads that user's saved applications from Supabase. On a first sign-in, it copies the current browser applications to the user's cloud account. Later adds, edits, status changes, and deletions are synced to the cloud. Signed-out use remains local to the browser with `localStorage`.
+While signed in, NextStep loads that user's saved applications from Supabase. On a first sign-in, it seeds a personal copy of the demo applications into the user's cloud account. Later adds, edits, status changes, and deletions are synced to the cloud. Signing out returns the visitor to the landing page.
 
 The hosted project is configured with a Supabase database migration, row-level security, GitHub Actions variables, and the production redirect URL. For local development, copy `.env.example` to `.env.local` and add the project's URL and publishable key.
 
@@ -101,4 +102,4 @@ npm run build
 
 ## Project status
 
-This is an active portfolio project. The MVP now covers a complete local and cloud-synced application-tracking workflow, with scheduled reminders and AI guidance planned next.
+This is an active portfolio project. The MVP now covers a complete authenticated, cloud-synced application-tracking workflow, with scheduled reminders and AI guidance planned next.
