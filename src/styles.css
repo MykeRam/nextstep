@@ -395,6 +395,7 @@ h2 {
 @media (prefers-reduced-motion: reduce) {
   .dashboard-entrance .dashboard-stage,
   .dashboard-entrance .dashboard-stage_status .status-summary button,
+  .view-content-transition,
   .auth-message_shine {
     animation: none;
   }
@@ -880,6 +881,9 @@ time {
   font-size: 12px;
   line-height: 1;
   text-align: center;
+  transition:
+    background-color 180ms ease,
+    color 180ms ease;
 }
 .view-toggle button + button {
   border-left: 1px solid #d7d8d5;
@@ -888,6 +892,19 @@ time {
   background: #f0f0ed;
   color: #202124;
   font-weight: 650;
+}
+.view-content-transition {
+  animation: view-content-enter 220ms ease-out both;
+}
+@keyframes view-content-enter {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 .board-view {
   display: grid;

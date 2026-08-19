@@ -41,31 +41,33 @@ export function FollowUps({ applications, onEdit }: FollowUpsProps) {
           </div>
         </div>
       </div>
-      {view === 'calendar' ? (
-        <FollowUpCalendar applications={applications} onEdit={onEdit} />
-      ) : applications.length === 0 ? (
-        <p className="empty-state">No follow-ups scheduled yet.</p>
-      ) : (
-        <ul className="follow-ups-list">
-          {applications.map((application) => {
-            const overdue = new Date(`${application.followUpDate}T00:00:00`) < today;
-            return (
-              <li key={application.id}>
-                <div>
-                  <strong>{application.company}</strong>
-                  <span>{application.role}</span>
-                </div>
-                <time className={overdue ? 'overdue' : ''}>
-                  {overdue
-                    ? `Overdue · ${formatDate(application.followUpDate)}`
-                    : formatDate(application.followUpDate)}
-                </time>
-                <button onClick={() => onEdit(application)}>Edit</button>
-              </li>
-            );
-          })}
-        </ul>
-      )}
+      <div className="view-content-transition" key={view}>
+        {view === 'calendar' ? (
+          <FollowUpCalendar applications={applications} onEdit={onEdit} />
+        ) : applications.length === 0 ? (
+          <p className="empty-state">No follow-ups scheduled yet.</p>
+        ) : (
+          <ul className="follow-ups-list">
+            {applications.map((application) => {
+              const overdue = new Date(`${application.followUpDate}T00:00:00`) < today;
+              return (
+                <li key={application.id}>
+                  <div>
+                    <strong>{application.company}</strong>
+                    <span>{application.role}</span>
+                  </div>
+                  <time className={overdue ? 'overdue' : ''}>
+                    {overdue
+                      ? `Overdue · ${formatDate(application.followUpDate)}`
+                      : formatDate(application.followUpDate)}
+                  </time>
+                  <button onClick={() => onEdit(application)}>Edit</button>
+                </li>
+              );
+            })}
+          </ul>
+        )}
+      </div>
     </section>
   );
 }

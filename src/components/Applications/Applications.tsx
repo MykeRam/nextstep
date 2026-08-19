@@ -82,22 +82,24 @@ export function Applications({
           </div>
         </div>
       </div>
-      {applications.length === 0 ? (
-        <p className="empty-state">No applications match those filters.</p>
-      ) : view === 'list' ? (
-        <ApplicationList
-          applications={applications}
-          onDelete={onDelete}
-          onEdit={onEdit}
-          onStatusChange={onStatusChange}
-        />
-      ) : (
-        <ApplicationBoard
-          applications={applications}
-          statuses={boardStatuses}
-          onStatusChange={onStatusChange}
-        />
-      )}
+      <div className="view-content-transition" key={view}>
+        {applications.length === 0 ? (
+          <p className="empty-state">No applications match those filters.</p>
+        ) : view === 'list' ? (
+          <ApplicationList
+            applications={applications}
+            onDelete={onDelete}
+            onEdit={onEdit}
+            onStatusChange={onStatusChange}
+          />
+        ) : (
+          <ApplicationBoard
+            applications={applications}
+            statuses={boardStatuses}
+            onStatusChange={onStatusChange}
+          />
+        )}
+      </div>
     </section>
   );
 }
