@@ -37,9 +37,11 @@ export function LandingPage({ isConfigured, onSendMagicLink }: LandingPageProps)
 
   return (
     <main className="landing-shell">
+      <header className="landing-header">
+        <span>NextStep</span>
+      </header>
       <section className="landing-hero" aria-labelledby="landing-title">
         <div className="landing-intro">
-          <p className="landing-brand">NEXTSTEP</p>
           <h1 id="landing-title">A calmer command center for your job search.</h1>
           <p>
             Track every opportunity, follow up at the right time, and keep your job search moving
