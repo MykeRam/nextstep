@@ -315,23 +315,26 @@ h2 {
   background: linear-gradient(
     100deg,
     #4953b8 0%,
-    #4953b8 35%,
-    #9ba3ff 50%,
-    #4953b8 65%,
+    #4953b8 30%,
+    #b9c0ff 42%,
+    #ffffff 50%,
+    #b9c0ff 58%,
+    #4953b8 70%,
     #4953b8 100%
   );
   background-clip: text;
-  background-size: 220% 100%;
+  background-size: 260% 100%;
+  filter: drop-shadow(0 0 5px rgb(155 163 255 / 55%));
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
-  animation: sync-shine 900ms ease-out both;
+  animation: sync-shine 1.3s cubic-bezier(0.16, 1, 0.3, 1) both;
 }
 @keyframes sync-shine {
   from {
-    background-position: 100% 0;
+    background-position: 120% 0;
   }
   to {
-    background-position: -120% 0;
+    background-position: -160% 0;
   }
 }
 @media (prefers-reduced-motion: reduce) {
