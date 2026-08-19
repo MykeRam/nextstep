@@ -351,6 +351,9 @@ h2 {
 .auth-message {
   color: #4953b8 !important;
 }
+.auth-message_placeholder {
+  visibility: hidden;
+}
 .auth-message_shine {
   background: linear-gradient(
     100deg,

@@ -115,13 +115,12 @@ export function AuthPanel({
           <p aria-label={`Signed in as ${user.email}`}>
             <span aria-hidden="true">Signed in as {typedEmail}</span>
           </p>
-          {showSyncStatus && (
-            <p
-              className={`${syncError ? 'auth-error' : 'auth-message'}${shouldShine ? ' auth-message_shine' : ''}`}
-            >
-              {statusMessage}
-            </p>
-          )}
+          <p
+            aria-hidden={!showSyncStatus}
+            className={`${syncError ? 'auth-error' : 'auth-message'}${shouldShine ? ' auth-message_shine' : ''}${showSyncStatus ? '' : ' auth-message_placeholder'}`}
+          >
+            {showSyncStatus ? statusMessage : 'Cloud sync is active.'}
+          </p>
         </div>
         <button className="link-button" onClick={onSignOut}>
           Sign out
