@@ -29,7 +29,7 @@ import {
 import { loadApplications } from './utils/applications';
 
 export default function App() {
-  const { isConfigured, loading, sendMagicLink, shouldAnimateDashboard, signOut, user } = useAuth();
+  const { isConfigured, loading, sendMagicLink, signOut, user } = useAuth();
   const [applications, setApplications] = useState<Application[]>(loadApplications);
   const [statusFilter, setStatusFilter] = useState<Status | 'All'>('All');
   const [query, setQuery] = useState('');
@@ -39,6 +39,8 @@ export default function App() {
   const [editingId, setEditingId] = useState<string | null>(null);
   const [cloudSyncing, setCloudSyncing] = useState(false);
   const [syncError, setSyncError] = useState('');
+  // Temporary preview mode: replay the entrance sequence on every signed-in refresh.
+  const shouldPlayDashboardEntrance = Boolean(user);
 
   useEffect(() => {
     localStorage.setItem('nextstep-applications', JSON.stringify(applications));
@@ -204,7 +206,7 @@ export default function App() {
   }
 
   return (
-    <main className={`app-shell${shouldAnimateDashboard ? ' dashboard-entrance' : ''}`}>
+    <main className={`app-shell${shouldPlayDashboardEntrance ? ' dashboard-entrance' : ''}`}>
       <div className="dashboard-stage dashboard-stage_header">
         <AppHeader applicationCount={applications.length} />
       </div>
@@ -217,7 +219,7 @@ export default function App() {
           loading={loading}
           onSendMagicLink={sendMagicLink}
           onSignOut={signOut}
-          shouldAnimate={shouldAnimateDashboard}
+          shouldAnimate={shouldPlayDashboardEntrance}
           syncError={syncError}
           syncing={cloudSyncing}
           user={user}
