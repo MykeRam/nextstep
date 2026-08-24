@@ -8,6 +8,7 @@ NextStep is a simple job application command center. It helps job seekers keep a
 - Edit or delete applications
 - Open an application detail view with full notes, job link, important dates, and a status timeline
 - Update an application's status directly from the list or board
+- Receive a fixed success confirmation after applications are added, edited, moved to a new status, or removed
 - Search applications by company, role, or location
 - Filter applications by status
 - Sort applications by follow-up date, applied date, or company
@@ -40,6 +41,10 @@ NextStep is a simple job application command center. It helps job seekers keep a
 The signed-in dashboard introduces information in a deliberate order: the header enters first, the workspace sections follow, the signed-in account panel types the email address and reveals cloud-sync confirmation, and the five application-status cards arrive individually from left to right.
 
 The motion uses CSS only and honors `prefers-reduced-motion`, which shows all content immediately without animated movement, typing, or shine effects.
+
+## Application change feedback
+
+After an application is added, edited, moved to a new status, or removed, NextStep shows a brief fixed green confirmation bar. It slides in from the top, remains visible long enough to be read, then uses a matching upward exit animation.
 
 ## Project structure
 
@@ -101,6 +106,7 @@ npm run build
 - [x] Add a follow-up calendar and in-app overdue/due-today reminders
 - [x] Add dashboard insights for pipeline health and next actions
 - [x] Add a detailed application modal with a persisted status timeline
+- [x] Add animated confirmation feedback for application changes
 
 ### Next steps
 
