@@ -1,4 +1,4 @@
-import { FormEvent, useEffect, useMemo, useState } from 'react';
+import { FormEvent, useEffect, useMemo, useRef, useState } from 'react';
 
 import { ApplicationForm } from './components/ApplicationForm/ApplicationForm';
 import { AppHeader } from './components/AppHeader/AppHeader';
@@ -41,6 +41,7 @@ export default function App() {
   const [selectedApplication, setSelectedApplication] = useState<Application | null>(null);
   const [cloudSyncing, setCloudSyncing] = useState(false);
   const [syncError, setSyncError] = useState('');
+  const applicationFormRef = useRef<HTMLDivElement>(null);
   // Temporary preview mode: replay the entrance sequence on every signed-in refresh.
   const shouldPlayDashboardEntrance = Boolean(user);
 
@@ -177,7 +178,7 @@ export default function App() {
     };
     setDraft(applicationDraft);
     setEditingId(application.id);
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    applicationFormRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
   }
 
   function cancelEdit() {
@@ -272,7 +273,11 @@ export default function App() {
       <div className="dashboard-stage" style={{ '--entrance-order': 4 } as React.CSSProperties}>
         <FollowUps applications={upcomingFollowUps} onEdit={editApplication} />
       </div>
-      <div className="dashboard-stage" style={{ '--entrance-order': 5 } as React.CSSProperties}>
+      <div
+        className="dashboard-stage"
+        ref={applicationFormRef}
+        style={{ '--entrance-order': 5 } as React.CSSProperties}
+      >
         <ApplicationForm
           draft={draft}
           editing={Boolean(editingId)}
