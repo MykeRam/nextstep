@@ -34,6 +34,7 @@ NextStep is a simple job application command center. It helps job seekers keep a
 - Vite
 - Plain CSS
 - Supabase Auth and Postgres
+- Vitest and React Testing Library
 - GitHub Pages
 
 ## Dashboard motion
@@ -55,6 +56,7 @@ src/
 ├── hooks/        # Reusable React hooks, including authentication
 ├── lib/          # Third-party client configuration
 ├── services/     # Supabase application data operations
+├── test/         # Shared test setup and application fixtures
 ├── types/       # Shared TypeScript types
 ├── utils/       # Storage and date-formatting helpers
 ├── App.tsx      # Application state and component composition
@@ -87,8 +89,12 @@ Useful commands:
 ```bash
 npm run format
 npm run format:check
+npm run test
+npm run test:watch
 npm run build
 ```
+
+The GitHub Pages workflow runs the automated test suite before each production build and deployment.
 
 ## Product roadmap
 
@@ -107,6 +113,7 @@ npm run build
 - [x] Add dashboard insights for pipeline health and next actions
 - [x] Add a detailed application modal with a persisted status timeline
 - [x] Add animated confirmation feedback for application changes
+- [x] Add automated component and utility tests with Vitest and React Testing Library
 
 ### Next steps
 
