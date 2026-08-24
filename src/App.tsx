@@ -10,6 +10,7 @@ import { AuthPanel } from './components/AuthPanel/AuthPanel';
 import { FollowUps } from './components/FollowUps/FollowUps';
 import { FollowUpReminders } from './components/FollowUpReminders/FollowUpReminders';
 import { LandingPage } from './components/LandingPage/LandingPage';
+import { SaveConfirmation } from './components/SaveConfirmation/SaveConfirmation';
 import { StatusSummary } from './components/StatusSummary/StatusSummary';
 import { emptyDraft } from './data/starterApplications';
 import { useAuth } from './hooks/useAuth';
@@ -41,13 +42,22 @@ export default function App() {
   const [selectedApplication, setSelectedApplication] = useState<Application | null>(null);
   const [cloudSyncing, setCloudSyncing] = useState(false);
   const [syncError, setSyncError] = useState('');
+  const [confirmationMessage, setConfirmationMessage] = useState('');
   const applicationFormRef = useRef<HTMLDivElement>(null);
+  const confirmationTimerRef = useRef<ReturnType<typeof window.setTimeout> | null>(null);
   // Temporary preview mode: replay the entrance sequence on every signed-in refresh.
   const shouldPlayDashboardEntrance = Boolean(user);
 
   useEffect(() => {
     localStorage.setItem('nextstep-applications', JSON.stringify(applications));
   }, [applications]);
+
+  useEffect(
+    () => () => {
+      if (confirmationTimerRef.current) window.clearTimeout(confirmationTimerRef.current);
+    },
+    [],
+  );
 
   useEffect(() => {
     if (!user) {
@@ -129,6 +139,12 @@ export default function App() {
     setDraft((current) => ({ ...current, [field]: value }));
   }
 
+  function showConfirmation(message: string) {
+    if (confirmationTimerRef.current) window.clearTimeout(confirmationTimerRef.current);
+    setConfirmationMessage(message);
+    confirmationTimerRef.current = window.setTimeout(() => setConfirmationMessage(''), 3600);
+  }
+
   function saveApplication(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     if (!draft.company.trim() || !draft.role.trim()) return;
@@ -163,6 +179,7 @@ export default function App() {
 
     setDraft(emptyDraft);
     setEditingId(null);
+    showConfirmation(editingId ? 'Application updated.' : 'Application added.');
   }
 
   function editApplication(application: Application) {
@@ -190,6 +207,7 @@ export default function App() {
     setApplications((current) => current.filter((application) => application.id !== id));
     if (editingId === id) cancelEdit();
     if (selectedApplication?.id === id) setSelectedApplication(null);
+    showConfirmation('Application removed.');
 
     if (user) {
       void deleteCloudApplication(id).then((error) => setSyncError(error ?? ''));
@@ -212,6 +230,7 @@ export default function App() {
       ),
     );
     if (selectedApplication?.id === id) setSelectedApplication(applicationWithUpdatedStatus);
+    showConfirmation(`Status updated to ${status}.`);
 
     if (user) {
       void upsertCloudApplication(applicationWithUpdatedStatus, user.id).then((error) =>
@@ -239,6 +258,7 @@ export default function App() {
 
   return (
     <main className={`app-shell${shouldPlayDashboardEntrance ? ' dashboard-entrance' : ''}`}>
+      {confirmationMessage && <SaveConfirmation message={confirmationMessage} />}
       <div className="dashboard-stage dashboard-stage_header">
         <AppHeader applicationCount={applications.length} />
       </div>
