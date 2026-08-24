@@ -43,8 +43,10 @@ export default function App() {
   const [cloudSyncing, setCloudSyncing] = useState(false);
   const [syncError, setSyncError] = useState('');
   const [confirmationMessage, setConfirmationMessage] = useState('');
+  const [confirmationIsExiting, setConfirmationIsExiting] = useState(false);
   const applicationFormRef = useRef<HTMLDivElement>(null);
   const confirmationTimerRef = useRef<ReturnType<typeof window.setTimeout> | null>(null);
+  const confirmationExitTimerRef = useRef<ReturnType<typeof window.setTimeout> | null>(null);
   // Temporary preview mode: replay the entrance sequence on every signed-in refresh.
   const shouldPlayDashboardEntrance = Boolean(user);
 
@@ -55,6 +57,7 @@ export default function App() {
   useEffect(
     () => () => {
       if (confirmationTimerRef.current) window.clearTimeout(confirmationTimerRef.current);
+      if (confirmationExitTimerRef.current) window.clearTimeout(confirmationExitTimerRef.current);
     },
     [],
   );
@@ -141,8 +144,16 @@ export default function App() {
 
   function showConfirmation(message: string) {
     if (confirmationTimerRef.current) window.clearTimeout(confirmationTimerRef.current);
+    if (confirmationExitTimerRef.current) window.clearTimeout(confirmationExitTimerRef.current);
     setConfirmationMessage(message);
-    confirmationTimerRef.current = window.setTimeout(() => setConfirmationMessage(''), 3600);
+    setConfirmationIsExiting(false);
+    confirmationTimerRef.current = window.setTimeout(() => {
+      setConfirmationIsExiting(true);
+      confirmationExitTimerRef.current = window.setTimeout(() => {
+        setConfirmationMessage('');
+        setConfirmationIsExiting(false);
+      }, 240);
+    }, 3600);
   }
 
   function saveApplication(event: FormEvent<HTMLFormElement>) {
@@ -258,7 +269,9 @@ export default function App() {
 
   return (
     <main className={`app-shell${shouldPlayDashboardEntrance ? ' dashboard-entrance' : ''}`}>
-      {confirmationMessage && <SaveConfirmation message={confirmationMessage} />}
+      {confirmationMessage && (
+        <SaveConfirmation exiting={confirmationIsExiting} message={confirmationMessage} />
+      )}
       <div className="dashboard-stage dashboard-stage_header">
         <AppHeader applicationCount={applications.length} />
       </div>
