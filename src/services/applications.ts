@@ -1,5 +1,6 @@
-import { Application } from '../types/application';
+import { Application, StatusHistoryEntry } from '../types/application';
 import { supabase } from '../lib/supabase';
+import { getStatusHistory } from '../utils/applications';
 
 type ApplicationRow = {
   id: string;
@@ -12,6 +13,7 @@ type ApplicationRow = {
   applied_date: string | null;
   follow_up_date: string | null;
   notes: string;
+  status_history: StatusHistoryEntry[];
   created_at: string;
   updated_at: string;
 };
@@ -27,6 +29,7 @@ function fromRow(row: ApplicationRow): Application {
     appliedDate: row.applied_date ?? '',
     followUpDate: row.follow_up_date ?? '',
     notes: row.notes,
+    statusHistory: Array.isArray(row.status_history) ? row.status_history : [],
   };
 }
 
@@ -42,6 +45,7 @@ function toRow(application: Application, userId: string) {
     applied_date: application.appliedDate || null,
     follow_up_date: application.followUpDate || null,
     notes: application.notes,
+    status_history: getStatusHistory(application),
     updated_at: new Date().toISOString(),
   };
 }

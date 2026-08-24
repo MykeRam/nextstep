@@ -5,12 +5,14 @@ type ApplicationBoardProps = {
   applications: Application[];
   statuses: readonly Status[];
   onStatusChange: (id: string, status: Status) => void;
+  onViewDetails: (application: Application) => void;
 };
 
 export function ApplicationBoard({
   applications,
   statuses,
   onStatusChange,
+  onViewDetails,
 }: ApplicationBoardProps) {
   return (
     <div className="board-view">
@@ -45,6 +47,12 @@ export function ApplicationBoard({
                   {application.followUpDate && (
                     <small>Follow up {formatDate(application.followUpDate)}</small>
                   )}
+                  <button
+                    className="board-details-button"
+                    onClick={() => onViewDetails(application)}
+                  >
+                    Details
+                  </button>
                   <select
                     aria-label={`Update status for ${application.company}`}
                     value={application.status}

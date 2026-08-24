@@ -2,6 +2,11 @@ export const STATUSES = ['Saved', 'Applied', 'Interviewing', 'Offer', 'Rejected'
 
 export type Status = (typeof STATUSES)[number];
 
+export type StatusHistoryEntry = {
+  status: Status;
+  changedAt: string;
+};
+
 export type Application = {
   id: string;
   company: string;
@@ -12,9 +17,10 @@ export type Application = {
   appliedDate: string;
   followUpDate: string;
   notes: string;
+  statusHistory?: StatusHistoryEntry[];
 };
 
-export type ApplicationDraft = Omit<Application, 'id'>;
+export type ApplicationDraft = Omit<Application, 'id' | 'statusHistory'>;
 
 export type SortOption = 'followUp' | 'appliedDate' | 'company';
 

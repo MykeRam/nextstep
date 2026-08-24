@@ -6,6 +6,7 @@ type ApplicationListProps = {
   onDelete: (id: string) => void;
   onEdit: (application: Application) => void;
   onStatusChange: (id: string, status: Status) => void;
+  onViewDetails: (application: Application) => void;
 };
 
 export function ApplicationList({
@@ -13,6 +14,7 @@ export function ApplicationList({
   onDelete,
   onEdit,
   onStatusChange,
+  onViewDetails,
 }: ApplicationListProps) {
   return (
     <ul className="application-list">
@@ -50,6 +52,7 @@ export function ApplicationList({
               : 'Not applied yet'}
           </time>
           <div className="row-actions">
+            <button onClick={() => onViewDetails(application)}>Details</button>
             <button onClick={() => onEdit(application)}>Edit</button>
             <button className="delete-button" onClick={() => onDelete(application.id)}>
               Delete

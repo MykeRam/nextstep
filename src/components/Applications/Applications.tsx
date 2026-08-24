@@ -11,6 +11,7 @@ type ApplicationsProps = {
   view: View;
   onDelete: (id: string) => void;
   onEdit: (application: Application) => void;
+  onViewDetails: (application: Application) => void;
   onQueryChange: (query: string) => void;
   onSortChange: (sortBy: SortOption) => void;
   onStatusChange: (id: string, status: Status) => void;
@@ -27,6 +28,7 @@ export function Applications({
   view,
   onDelete,
   onEdit,
+  onViewDetails,
   onQueryChange,
   onSortChange,
   onStatusChange,
@@ -91,12 +93,14 @@ export function Applications({
             onDelete={onDelete}
             onEdit={onEdit}
             onStatusChange={onStatusChange}
+            onViewDetails={onViewDetails}
           />
         ) : (
           <ApplicationBoard
             applications={applications}
             statuses={boardStatuses}
             onStatusChange={onStatusChange}
+            onViewDetails={onViewDetails}
           />
         )}
       </div>

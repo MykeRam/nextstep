@@ -4,6 +4,7 @@ import { ApplicationForm } from './components/ApplicationForm/ApplicationForm';
 import { AppHeader } from './components/AppHeader/AppHeader';
 import { DashboardInsights } from './components/DashboardInsights/DashboardInsights';
 import { AppFooter } from './components/AppFooter/AppFooter';
+import { ApplicationDetailModal } from './components/ApplicationDetailModal/ApplicationDetailModal';
 import { Applications } from './components/Applications/Applications';
 import { AuthPanel } from './components/AuthPanel/AuthPanel';
 import { FollowUps } from './components/FollowUps/FollowUps';
@@ -26,7 +27,7 @@ import {
   Status,
   View,
 } from './types/application';
-import { loadApplications } from './utils/applications';
+import { createStatusHistoryEntry, getStatusHistory, loadApplications } from './utils/applications';
 
 export default function App() {
   const { isConfigured, loading, sendMagicLink, signOut, user } = useAuth();
@@ -37,6 +38,7 @@ export default function App() {
   const [view, setView] = useState<View>('list');
   const [draft, setDraft] = useState<ApplicationDraft>(emptyDraft);
   const [editingId, setEditingId] = useState<string | null>(null);
+  const [selectedApplication, setSelectedApplication] = useState<Application | null>(null);
   const [cloudSyncing, setCloudSyncing] = useState(false);
   const [syncError, setSyncError] = useState('');
   // Temporary preview mode: replay the entrance sequence on every signed-in refresh.
@@ -130,7 +132,17 @@ export default function App() {
     event.preventDefault();
     if (!draft.company.trim() || !draft.role.trim()) return;
 
-    const applicationToSave = { ...draft, id: editingId ?? crypto.randomUUID() };
+    const existingApplication = applications.find((application) => application.id === editingId);
+    const statusHistory = existingApplication
+      ? existingApplication.status === draft.status
+        ? getStatusHistory(existingApplication)
+        : [...getStatusHistory(existingApplication), createStatusHistoryEntry(draft.status)]
+      : [createStatusHistoryEntry(draft.status)];
+    const applicationToSave = {
+      ...draft,
+      id: editingId ?? crypto.randomUUID(),
+      statusHistory,
+    };
 
     if (editingId) {
       setApplications((current) =>
@@ -153,9 +165,18 @@ export default function App() {
   }
 
   function editApplication(application: Application) {
-    const { id, ...applicationDraft } = application;
+    const applicationDraft: ApplicationDraft = {
+      appliedDate: application.appliedDate,
+      company: application.company,
+      followUpDate: application.followUpDate,
+      jobUrl: application.jobUrl,
+      location: application.location,
+      notes: application.notes,
+      role: application.role,
+      status: application.status,
+    };
     setDraft(applicationDraft);
-    setEditingId(id);
+    setEditingId(application.id);
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
@@ -167,6 +188,7 @@ export default function App() {
   function deleteApplication(id: string) {
     setApplications((current) => current.filter((application) => application.id !== id));
     if (editingId === id) cancelEdit();
+    if (selectedApplication?.id === id) setSelectedApplication(null);
 
     if (user) {
       void deleteCloudApplication(id).then((error) => setSyncError(error ?? ''));
@@ -175,14 +197,23 @@ export default function App() {
 
   function updateApplicationStatus(id: string, status: Status) {
     const updatedApplication = applications.find((application) => application.id === id);
+    if (!updatedApplication || updatedApplication.status === status) return;
+
+    const applicationWithUpdatedStatus = {
+      ...updatedApplication,
+      status,
+      statusHistory: [...getStatusHistory(updatedApplication), createStatusHistoryEntry(status)],
+    };
+
     setApplications((current) =>
       current.map((application) =>
-        application.id === id ? { ...application, status } : application,
+        application.id === id ? applicationWithUpdatedStatus : application,
       ),
     );
+    if (selectedApplication?.id === id) setSelectedApplication(applicationWithUpdatedStatus);
 
-    if (user && updatedApplication) {
-      void upsertCloudApplication({ ...updatedApplication, status }, user.id).then((error) =>
+    if (user) {
+      void upsertCloudApplication(applicationWithUpdatedStatus, user.id).then((error) =>
         setSyncError(error ?? ''),
       );
     }
@@ -260,6 +291,7 @@ export default function App() {
           view={view}
           onDelete={deleteApplication}
           onEdit={editApplication}
+          onViewDetails={setSelectedApplication}
           onQueryChange={setQuery}
           onSortChange={setSortBy}
           onStatusChange={updateApplicationStatus}
@@ -270,6 +302,14 @@ export default function App() {
       <div className="dashboard-stage" style={{ '--entrance-order': 7 } as React.CSSProperties}>
         <AppFooter />
       </div>
+      <ApplicationDetailModal
+        application={selectedApplication}
+        onClose={() => setSelectedApplication(null)}
+        onEdit={(application) => {
+          setSelectedApplication(null);
+          editApplication(application);
+        }}
+      />
     </main>
   );
 }
