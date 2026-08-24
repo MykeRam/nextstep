@@ -2,18 +2,17 @@ import { useState } from 'react';
 
 import { FollowUpCalendar } from '../FollowUpCalendar/FollowUpCalendar';
 import { Application } from '../../types/application';
-import { formatDate } from '../../utils/applications';
+import { formatDate, getFollowUpPriority } from '../../utils/applications';
 
 type FollowUpsProps = {
   applications: Application[];
+  onComplete: (id: string) => void;
   onEdit: (application: Application) => void;
+  onSnooze: (id: string, days: number) => void;
 };
 
-export function FollowUps({ applications, onEdit }: FollowUpsProps) {
+export function FollowUps({ applications, onComplete, onEdit, onSnooze }: FollowUpsProps) {
   const [view, setView] = useState<'list' | 'calendar'>('list');
-  const today = new Date();
-  today.setHours(0, 0, 0, 0);
-
   return (
     <section className="card follow-ups-card" aria-labelledby="follow-ups-title">
       <div className="section-heading">
@@ -49,19 +48,51 @@ export function FollowUps({ applications, onEdit }: FollowUpsProps) {
         ) : (
           <ul className="follow-ups-list">
             {applications.map((application) => {
-              const overdue = new Date(`${application.followUpDate}T00:00:00`) < today;
+              const priority = getFollowUpPriority(application.followUpDate);
+              const priorityLabel =
+                priority === 'overdue'
+                  ? 'Overdue'
+                  : priority === 'today'
+                    ? 'Due today'
+                    : 'Upcoming';
+
               return (
                 <li key={application.id}>
                   <div>
                     <strong>{application.company}</strong>
                     <span>{application.role}</span>
                   </div>
-                  <time className={overdue ? 'overdue' : ''}>
-                    {overdue
-                      ? `Overdue · ${formatDate(application.followUpDate)}`
-                      : formatDate(application.followUpDate)}
+                  <time className={`follow-up-priority follow-up-priority_${priority}`}>
+                    {priorityLabel} · {formatDate(application.followUpDate)}
                   </time>
-                  <button onClick={() => onEdit(application)}>Edit</button>
+                  <div className="follow-up-item-actions">
+                    <button
+                      aria-label={`Complete follow-up for ${application.company}`}
+                      onClick={() => onComplete(application.id)}
+                      type="button"
+                    >
+                      Complete
+                    </button>
+                    <select
+                      aria-label={`Snooze follow-up for ${application.company}`}
+                      defaultValue=""
+                      onChange={(event) => {
+                        const days = Number(event.target.value);
+                        if (!days) return;
+
+                        onSnooze(application.id, days);
+                        event.target.value = '';
+                      }}
+                    >
+                      <option value="">Snooze</option>
+                      <option value="1">1 day</option>
+                      <option value="3">3 days</option>
+                      <option value="7">7 days</option>
+                    </select>
+                    <button onClick={() => onEdit(application)} type="button">
+                      Edit
+                    </button>
+                  </div>
                 </li>
               );
             })}

@@ -28,6 +28,33 @@ export function formatDate(date: string) {
   });
 }
 
+export type FollowUpPriority = 'overdue' | 'today' | 'upcoming';
+
+export function getTodayKey(currentDate = new Date()) {
+  const year = currentDate.getFullYear();
+  const month = String(currentDate.getMonth() + 1).padStart(2, '0');
+  const day = String(currentDate.getDate()).padStart(2, '0');
+  return `${year}-${month}-${day}`;
+}
+
+export function getFollowUpPriority(
+  followUpDate: string,
+  currentDate = new Date(),
+): FollowUpPriority {
+  const today = getTodayKey(currentDate);
+
+  if (followUpDate < today) return 'overdue';
+  if (followUpDate === today) return 'today';
+  return 'upcoming';
+}
+
+export function getSnoozedFollowUpDate(days: number, currentDate = new Date()) {
+  const date = new Date(currentDate);
+  date.setHours(0, 0, 0, 0);
+  date.setDate(date.getDate() + days);
+  return getTodayKey(date);
+}
+
 export function getStatusHistory(application: Application): StatusHistoryEntry[] {
   if (application.statusHistory?.length) return application.statusHistory;
 

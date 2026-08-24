@@ -28,7 +28,12 @@ import {
   Status,
   View,
 } from './types/application';
-import { createStatusHistoryEntry, getStatusHistory, loadApplications } from './utils/applications';
+import {
+  createStatusHistoryEntry,
+  getSnoozedFollowUpDate,
+  getStatusHistory,
+  loadApplications,
+} from './utils/applications';
 
 export default function App() {
   const { isConfigured, loading, sendMagicLink, signOut, user } = useAuth();
@@ -250,6 +255,37 @@ export default function App() {
     }
   }
 
+  function updateFollowUpDate(id: string, followUpDate: string, confirmation: string) {
+    const applicationToUpdate = applications.find((application) => application.id === id);
+    if (!applicationToUpdate) return;
+
+    const updatedApplication = { ...applicationToUpdate, followUpDate };
+
+    setApplications((current) =>
+      current.map((application) => (application.id === id ? updatedApplication : application)),
+    );
+    if (selectedApplication?.id === id) setSelectedApplication(updatedApplication);
+    showConfirmation(confirmation);
+
+    if (user) {
+      void upsertCloudApplication(updatedApplication, user.id).then((error) =>
+        setSyncError(error ?? ''),
+      );
+    }
+  }
+
+  function completeFollowUp(id: string) {
+    updateFollowUpDate(id, '', 'Follow-up completed.');
+  }
+
+  function snoozeFollowUp(id: string, days: number) {
+    updateFollowUpDate(
+      id,
+      getSnoozedFollowUpDate(days),
+      `Follow-up snoozed for ${days} day${days === 1 ? '' : 's'}.`,
+    );
+  }
+
   function filterByStatus(status: Status) {
     setStatusFilter((current) => (current === status ? 'All' : status));
     setView('list');
@@ -301,10 +337,20 @@ export default function App() {
         <DashboardInsights applications={applications} onEdit={editApplication} />
       </div>
       <div className="dashboard-stage" style={{ '--entrance-order': 3 } as React.CSSProperties}>
-        <FollowUpReminders applications={upcomingFollowUps} onEdit={editApplication} />
+        <FollowUpReminders
+          applications={upcomingFollowUps}
+          onComplete={completeFollowUp}
+          onEdit={editApplication}
+          onSnooze={snoozeFollowUp}
+        />
       </div>
       <div className="dashboard-stage" style={{ '--entrance-order': 4 } as React.CSSProperties}>
-        <FollowUps applications={upcomingFollowUps} onEdit={editApplication} />
+        <FollowUps
+          applications={upcomingFollowUps}
+          onComplete={completeFollowUp}
+          onEdit={editApplication}
+          onSnooze={snoozeFollowUp}
+        />
       </div>
       <div
         className="dashboard-stage"

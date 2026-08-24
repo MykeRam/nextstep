@@ -1,20 +1,19 @@
 import { Application } from '../../types/application';
-import { formatDate } from '../../utils/applications';
+import { formatDate, getTodayKey } from '../../utils/applications';
 
 type FollowUpRemindersProps = {
   applications: Application[];
+  onComplete: (id: string) => void;
   onEdit: (application: Application) => void;
+  onSnooze: (id: string, days: number) => void;
 };
 
-function getTodayKey() {
-  const today = new Date();
-  const year = today.getFullYear();
-  const month = String(today.getMonth() + 1).padStart(2, '0');
-  const day = String(today.getDate()).padStart(2, '0');
-  return `${year}-${month}-${day}`;
-}
-
-export function FollowUpReminders({ applications, onEdit }: FollowUpRemindersProps) {
+export function FollowUpReminders({
+  applications,
+  onComplete,
+  onEdit,
+  onSnooze,
+}: FollowUpRemindersProps) {
   const today = getTodayKey();
   const overdueApplications = applications.filter(
     (application) => application.followUpDate < today,
@@ -44,9 +43,34 @@ export function FollowUpReminders({ applications, onEdit }: FollowUpRemindersPro
         {reminders.map(({ application, label }) => (
           <li key={application.id}>
             <span className={label === 'Overdue' ? 'reminder-overdue' : ''}>{label}</span>
-            <button onClick={() => onEdit(application)} type="button">
-              {application.company} · {formatDate(application.followUpDate)}
-            </button>
+            <div className="reminder-item-actions">
+              <button onClick={() => onEdit(application)} type="button">
+                {application.company} · {formatDate(application.followUpDate)}
+              </button>
+              <button
+                aria-label={`Complete follow-up for ${application.company}`}
+                onClick={() => onComplete(application.id)}
+                type="button"
+              >
+                Complete
+              </button>
+              <select
+                aria-label={`Snooze follow-up for ${application.company}`}
+                defaultValue=""
+                onChange={(event) => {
+                  const days = Number(event.target.value);
+                  if (!days) return;
+
+                  onSnooze(application.id, days);
+                  event.target.value = '';
+                }}
+              >
+                <option value="">Snooze</option>
+                <option value="1">1 day</option>
+                <option value="3">3 days</option>
+                <option value="7">7 days</option>
+              </select>
+            </div>
           </li>
         ))}
       </ul>
