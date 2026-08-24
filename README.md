@@ -6,6 +6,7 @@ NextStep is a simple job application command center. It helps job seekers keep a
 
 - Add job applications with company, role, location, job URL, status, applied date, follow-up date, and notes
 - Edit or delete applications
+- Open an application detail view with full notes, job link, important dates, and a status timeline
 - Update an application's status directly from the list or board
 - Search applications by company, role, or location
 - Filter applications by status
@@ -70,7 +71,7 @@ NextStep uses Supabase for passwordless email authentication and cloud storage.
 
 Visitors start on a minimal landing page. Enter an email address to receive a one-time magic link. Supabase creates an account automatically for a new email address, then returns the user to the protected NextStep dashboard with an active session.
 
-While signed in, NextStep loads that user's saved applications from Supabase. On a first sign-in, it seeds a personal copy of the demo applications into the user's cloud account. Later adds, edits, status changes, and deletions are synced to the cloud. Signing out returns the visitor to the landing page.
+While signed in, NextStep loads that user's saved applications from Supabase. On a first sign-in, it seeds a personal copy of the demo applications into the user's cloud account. Later adds, edits, status changes, and deletions are synced to the cloud. Status changes are retained in each application's timeline. Signing out returns the visitor to the landing page.
 
 The hosted project is configured with a Supabase database migration, row-level security, GitHub Actions variables, and the production redirect URL. For local development, copy `.env.example` to `.env.local` and add the project's URL and publishable key.
 
@@ -99,6 +100,7 @@ npm run build
 - [x] Add passwordless sign-in and secure cloud-based storage with Supabase
 - [x] Add a follow-up calendar and in-app overdue/due-today reminders
 - [x] Add dashboard insights for pipeline health and next actions
+- [x] Add a detailed application modal with a persisted status timeline
 
 ### Next steps
 
