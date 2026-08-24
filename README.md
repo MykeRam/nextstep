@@ -118,11 +118,7 @@ The GitHub Pages workflow runs the automated test suite before each production b
 ### Next steps
 
 - [ ] Add scheduled email or push follow-up reminders
-- [ ] Add an AI Job Fit Analyzer with a secure server-side OpenAI integration
-  - Compare a saved résumé against each job description
-  - Return a match score, matching skills, and skill gaps
-  - Suggest résumé improvements and draft tailored cover letters
 
 ## Project status
 
-This is an active portfolio project. The MVP now covers a complete authenticated, cloud-synced application-tracking workflow, with scheduled reminders and AI guidance planned next.
+This is an active portfolio project. The MVP now covers a complete authenticated, cloud-synced application-tracking workflow, with scheduled reminders planned next.
