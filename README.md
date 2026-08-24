@@ -17,6 +17,7 @@ NextStep is a simple job application command center. It helps job seekers keep a
 - See upcoming follow-ups in date order, with overdue items highlighted
 - Switch between a follow-up list and month calendar view
 - Receive in-app reminders for overdue and due-today follow-ups
+- Prioritize follow-ups as overdue, due today, or upcoming, then complete or snooze them for 1, 3, or 7 days
 - Track pipeline health, response rate, monthly submissions, offers, and next actions with dashboard insights
 - Save data in the browser with `localStorage`
 - Sign in with a passwordless email magic link
@@ -46,6 +47,10 @@ The motion uses CSS only and honors `prefers-reduced-motion`, which shows all co
 ## Application change feedback
 
 After an application is added, edited, moved to a new status, or removed, NextStep shows a brief fixed green confirmation bar. It slides in from the top, remains visible long enough to be read, then uses a matching upward exit animation.
+
+## Follow-up workflow
+
+The Follow-ups list and urgent reminder banner give users three immediate actions: edit an application, mark its follow-up as complete, or snooze it for 1, 3, or 7 days. Completing clears the follow-up date; snoozing schedules a new date from today. Each action updates the signed-in user's existing cloud-synced application record and confirms the result in the app.
 
 ## Project structure
 
@@ -114,6 +119,7 @@ The GitHub Pages workflow runs the automated test suite before each production b
 - [x] Add a detailed application modal with a persisted status timeline
 - [x] Add animated confirmation feedback for application changes
 - [x] Add automated component and utility tests with Vitest and React Testing Library
+- [x] Add cloud-synced follow-up completion, snoozing, and priority labels
 
 ### Next steps
 
