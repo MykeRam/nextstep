@@ -2,6 +2,8 @@
 
 NextStep is a simple job application command center. It helps job seekers keep applications, status updates, follow-up dates, job links, and notes in one place instead of managing everything in a spreadsheet.
 
+[View the live demo](https://mykeram.github.io/nextstep/)
+
 ## Current features
 
 - Add job applications with company, role, location, job URL, status, applied date, follow-up date, and notes
