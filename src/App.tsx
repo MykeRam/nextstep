@@ -88,8 +88,12 @@ export default function App() {
       } else if (cloudApplications.length > 0) {
         setApplications(cloudApplications);
       } else {
-        const migrationError = await seedCloudApplications(applications, userId);
-        if (active && migrationError) setSyncError(migrationError);
+        const { applications: seededApplications, error: migrationError } =
+          await seedCloudApplications(applications, userId);
+        if (active) {
+          if (migrationError) setSyncError(migrationError);
+          else setApplications(seededApplications);
+        }
       }
 
       if (active) setCloudSyncing(false);

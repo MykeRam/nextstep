@@ -73,13 +73,20 @@ export async function upsertCloudApplication(application: Application, userId: s
 }
 
 export async function seedCloudApplications(applications: Application[], userId: string) {
-  if (!supabase || applications.length === 0) return null;
+  if (!supabase || applications.length === 0) return { applications, error: null };
+
+  // Starter data has stable IDs for local demo mode. Give each account its own
+  // IDs before inserting so one user's demo rows can never collide with another's.
+  const seededApplications = applications.map((application) => ({
+    ...application,
+    id: crypto.randomUUID(),
+  }));
 
   const { error } = await supabase
     .from('applications')
-    .upsert(applications.map((application) => toRow(application, userId)));
+    .insert(seededApplications.map((application) => toRow(application, userId)));
 
-  return error?.message ?? null;
+  return { applications: seededApplications, error: error?.message ?? null };
 }
 
 export async function deleteCloudApplication(id: string) {
